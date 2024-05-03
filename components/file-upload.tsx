@@ -35,9 +35,9 @@ export default function FileUpload({
           value?.map((item) => (
             <div
               key={item.key}
-              className="relative w-[200px] h-[200px] rounded-md overflow-hidden"
+              className="relative h-[200px] w-[200px] overflow-hidden rounded-md"
             >
-              <div className="z-10 absolute top-2 right-2">
+              <div className="absolute right-2 top-2 z-10">
                 <Button
                   type="button"
                   onClick={() => onDeleteFile(item.key)}
@@ -61,7 +61,7 @@ export default function FileUpload({
       <div>
         {value.length < IMG_MAX_LIMIT && (
           <UploadDropzone<OurFileRouter>
-            className="dark:bg-zinc-800 py-2 ut-label:text-sm ut-allowed-content:ut-uploading:text-red-300"
+            className="ut-label:text-sm ut-allowed-content:ut-uploading:text-red-300 py-2 dark:bg-zinc-800"
             endpoint="imageUploader"
             config={{ mode: "auto" }}
             content={{
@@ -69,8 +69,8 @@ export default function FileUpload({
                 if (isUploading)
                   return (
                     <>
-                      <p className="mt-2 text-sm text-slate-400 animate-pulse">
-                        Img Uploading...
+                      <p className="mt-2 animate-pulse text-sm text-slate-400">
+                        Img Uploading....
                       </p>
                     </>
                   );
