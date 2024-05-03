@@ -5,13 +5,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { getServerSession } from "next-auth";
+import ThemeProvider from "@/components/layout/ThemeToggle/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: "Next Shadcn",
-  description: "Basic dashboard with Next.js and Shadcn",
-};
 
 export default async function RootLayout({
   children,
@@ -22,10 +18,10 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} overflow-hidden`}>
-        <Providers session={session}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Toaster />
-          {children}
-        </Providers>
+        </ThemeProvider>
+        {children}
       </body>
     </html>
   );
