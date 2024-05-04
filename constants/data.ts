@@ -112,18 +112,18 @@ export type Employee = {
 };
 
 export const navItems: NavItem[] = [
-  {
-    title: "Dashboard",
-    href: "/dashboard",
-    icon: "dashboard",
-    label: "Dashboard",
-  },
-  {
-    title: "User",
-    href: "/dashboard/user",
-    icon: "user",
-    label: "user",
-  },
+  // {
+  //   title: "Dashboard",
+  //   href: "/dashboard",
+  //   icon: "dashboard",
+  //   label: "Dashboard",
+  // },
+  // {
+  //   title: "User",
+  //   href: "/dashboard/user",
+  //   icon: "user",
+  //   label: "user",
+  // },
   // {
   //   title: "Employee",
   //   href: "/dashboard/employee",
@@ -136,12 +136,12 @@ export const navItems: NavItem[] = [
     icon: "user",
     label: "tender",
   },
-  {
-    title: "Kanban",
-    href: "/dashboard/kanban",
-    icon: "kanban",
-    label: "kanban",
-  },
+  // {
+  //   title: "Kanban",
+  //   href: "/dashboard/kanban",
+  //   icon: "kanban",
+  //   label: "kanban",
+  // },
   {
     title: "Login",
     href: "/",

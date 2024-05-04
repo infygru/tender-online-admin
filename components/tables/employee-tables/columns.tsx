@@ -28,18 +28,10 @@ export const columns: ColumnDef<Employee>[] = [
     accessorKey: "title",
     header: "Title",
   },
-  {
-    accessorKey: "epublishedDate",
-    header: "e-Published Date",
-  },
-  {
-    accessorKey: "refNo",
-    header: "Ref.No",
-  },
-  {
-    accessorKey: "TenderId",
-    header: "Tender ID",
-  },
+  // {
+  //   accessorKey: "epublishedDate",
+  //   header: "e-Published Date",
+  // },
   {
     accessorKey: "openingDate",
     header: "Opening Date",
@@ -49,21 +41,29 @@ export const columns: ColumnDef<Employee>[] = [
     header: "Closing Date",
   },
   {
-    accessorKey: "organizationChain",
-    header: " Organisation Chain",
+    accessorKey: "refNo",
+    header: "Ref.No",
   },
   {
-    accessorKey: "AraeSpecification1",
-    header: "Area Specificity 1",
+    accessorKey: "TenderId",
+    header: "Tender ID",
   },
-  {
-    accessorKey: "AraeSpecification2",
-    header: "Area Specificity 2",
-  },
-  {
-    accessorKey: "AraeSpecification3",
-    header: "Area Specificity 3",
-  },
+  // {
+  //   accessorKey: "organizationChain",
+  //   header: " Organisation Chain",
+  // },
+  // {
+  //   accessorKey: "AraeSpecification1",
+  //   header: "Area Specificity 1",
+  // },
+  // {
+  //   accessorKey: "AraeSpecification2",
+  //   header: "Area Specificity 2",
+  // },
+  // {
+  //   accessorKey: "AraeSpecification3",
+  //   header: "Area Specificity 3",
+  // },
   {
     id: "actions",
     cell: ({ row }) => <CellAction data={row.original} />,
