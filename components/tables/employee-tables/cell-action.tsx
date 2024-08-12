@@ -26,7 +26,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const onConfirm = async () => {};
   const handletodelete = async () => {
     const response = await fetch(
-      `https://tender-online-h4lh.vercel.app/api/tender/delete/${data?._id as any}`,
+      `http://localhost:3000/api/tender/delete/${data?._id as any}`,
       {
         method: "DELETE",
       },

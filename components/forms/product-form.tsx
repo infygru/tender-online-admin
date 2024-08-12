@@ -110,7 +110,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const onSubmit = async (data: ProductFormValues) => {
     console.log(data, "data");
     const response = await fetch(
-      `https://tender-online-h4lh.vercel.app/api/auth/create/account`,
+      `http://localhost:3000/api/auth/create/account`,
       {
         method: initialData ? "PUT" : "POST",
         headers: {
@@ -156,9 +156,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 w-full"
+          className="w-full space-y-8"
         >
-          <div className="md:grid md:grid-cols-3 gap-8">
+          <div className="gap-8 md:grid md:grid-cols-3">
             <FormField
               control={form.control}
               name="name"

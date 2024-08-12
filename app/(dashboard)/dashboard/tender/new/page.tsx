@@ -17,21 +17,42 @@ import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 function App() {
   const [data, setData] = useState<any>([]);
+  console.log(data, "data");
+
   const router = useRouter();
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement> | any) => {
-    const file = e.target.files[0];
+
+  type ParsedData = { [key: string]: string | number | Date | boolean };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.readAsBinaryString(file);
-      reader.onload = (e) => {
-        if (e.target) {
-          const data = e.target.result as string;
-          const workbook = XLSX.read(data, { type: "binary" });
-          const sheetName = workbook.SheetNames[0];
-          const sheet = workbook.Sheets[sheetName];
-          const parsedData = XLSX.utils.sheet_to_json(sheet);
-          setData(parsedData);
-        }
+
+      reader.onload = (event) => {
+        const binaryString = event.target?.result as string;
+        const workbook = XLSX.read(binaryString, { type: "binary" });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const rawData = XLSX.utils.sheet_to_json<ParsedData>(sheet);
+
+        const parsedData = rawData.map((item) => {
+          const parsedItem: ParsedData = {};
+          Object.keys(item).forEach((key) => {
+            const formattedKey = key.replace(/\s/g, "");
+            let value = item[key];
+
+            // Handle date parsing
+            if (typeof value === "string" && !isNaN(Date.parse(value))) {
+              value = new Date(value);
+            }
+
+            parsedItem[formattedKey] = value;
+          });
+          return parsedItem;
+        });
+
+        setData(parsedData);
       };
     }
   };
@@ -40,7 +61,7 @@ function App() {
     try {
       // Make a POST request to your API endpoint with the data
       const response = await axios.post(
-        "https://tender-online-h4lh.vercel.app/api/tender/upload/bulk",
+        "http://localhost:3000/api/tender/upload/bulk",
         data,
       );
       if (response.status === 201) {
