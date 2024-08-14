@@ -61,7 +61,7 @@ function App() {
     try {
       // Make a POST request to your API endpoint with the data
       const response = await axios.post(
-        "http://localhost:3000/api/tender/upload/bulk",
+        "https://tender-online-h4lh.vercel.app/api/tender/upload/bulk",
         data,
       );
       if (response.status === 201) {
