@@ -34,8 +34,8 @@ export default function Page({ searchParams }: paramsProps) {
       res.json(),
     ),
   );
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error fetching data</div>;
+  // if (isLoading) return <div>Loading...</div>;
+  // if (error) return <div>Error fetching data</div>;
   const totalUsers = tender?.result?.length;
 
   return (
@@ -58,14 +58,14 @@ export default function Page({ searchParams }: paramsProps) {
         </div>
         <Separator />
 
-        <EmployeeTable
+        {/* <EmployeeTable
           searchKey="country"
           pageNo={page}
           columns={columns}
           totalUsers={totalUsers}
           data={tender?.result}
           pageCount={totalUsers / pageLimit}
-        />
+        /> */}
       </div>
     </>
   );

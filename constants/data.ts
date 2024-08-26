@@ -136,6 +136,12 @@ export const navItems: NavItem[] = [
     icon: "user",
     label: "tender",
   },
+  {
+    title: "Ads",
+    href: "/dashboard/ads",
+    icon: "user",
+    label: "tender",
+  },
   // {
   //   title: "Kanban",
   //   href: "/dashboard/kanban",
