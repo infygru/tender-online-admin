@@ -5,6 +5,7 @@ import { EmployeeTable } from "@/components/tables/employee-tables/employee-tabl
 import { buttonVariants } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
+import { toast } from "@/components/ui/use-toast";
 import { Employee } from "@/constants/data";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
@@ -29,13 +30,36 @@ export default function Page({ searchParams }: paramsProps) {
     data: tender,
     isLoading,
     error,
+    refetch,
   } = useQuery(["tender", { page, limit: pageLimit, country }], () =>
     fetch(`https://tender-online-h4lh.vercel.app/api/tender/all`).then((res) =>
       res.json(),
     ),
   );
-  // if (isLoading) return <div>Loading...</div>;
-  // if (error) return <div>Error fetching data</div>;
+
+  const handletodelete = async () => {
+    try {
+      const response = await fetch("https://tender-online-h4lh.vercel.app/api/tender/delete", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.ok) {
+        refetch();
+        toast({
+          title: "Data Deleted",
+          description: "All data has been deleted",
+          status: "success",
+        });
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error fetching data</div>;
   const totalUsers = tender?.result?.length;
 
   return (
@@ -55,17 +79,24 @@ export default function Page({ searchParams }: paramsProps) {
           >
             <Plus className="mr-2 h-4 w-4" /> Add New
           </Link>
+
+          <button
+            onClick={handletodelete}
+            className={cn(buttonVariants({ variant: "default" }))}
+          >
+            Delete all data
+          </button>
         </div>
         <Separator />
 
-        {/* <EmployeeTable
+        <EmployeeTable
           searchKey="country"
           pageNo={page}
           columns={columns}
           totalUsers={totalUsers}
           data={tender?.result}
           pageCount={totalUsers / pageLimit}
-        /> */}
+        />
       </div>
     </>
   );
