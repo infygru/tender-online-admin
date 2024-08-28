@@ -86,7 +86,7 @@ const App: React.FC = () => {
 
       try {
         const response = await axios.post(
-          "https://tender-online-h4lh.vercel.app/api/tender/upload/bulk",
+          "http://localhost:3000/api/tender/upload/bulk",
           chunk,
         );
 
