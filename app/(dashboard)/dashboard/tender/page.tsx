@@ -39,18 +39,20 @@ export default function Page({ searchParams }: paramsProps) {
 
   const handletodelete = async () => {
     try {
-      const response = await fetch("https://tender-online-h4lh.vercel.app/api/tender/delete", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "https://tender-online-h4lh.vercel.app/api/tender/delete",
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
       if (response.ok) {
         refetch();
         toast({
           title: "Data Deleted",
           description: "All data has been deleted",
-          status: "success",
         });
       }
     } catch (error) {
