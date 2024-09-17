@@ -37,23 +37,20 @@ const App: React.FC = () => {
           const workbook = XLSX.read(binaryString, { type: "binary" });
           const sheetName = workbook.SheetNames[0];
           const sheet = workbook.Sheets[sheetName];
-          const rawData = XLSX.utils.sheet_to_json<ParsedData>(sheet);
+          const rawData = XLSX.utils.sheet_to_json(sheet);
 
-          const parsedData = rawData.map((item) => {
-            const parsedItem: ParsedData = {};
+          const parsedData = rawData.map((item: any) => {
+            const parsedItem: Record<string, string> = {};
             Object.keys(item).forEach((key) => {
               const formattedKey = key.replace(/\s/g, "");
               let value = item[key];
 
-              if (typeof value === "string" && !isNaN(Date.parse(value))) {
-                value = new Date(value);
-              } else if (!isNaN(Number(value))) {
-                value = Number(value);
-              } else if (value === "TRUE" || value === "FALSE") {
-                value = value === "TRUE";
+              // Convert all values to strings dynamically
+              if (value !== undefined && value !== null) {
+                parsedItem[formattedKey] = String(value);
+              } else {
+                parsedItem[formattedKey] = ""; // Handle empty or null values as empty strings
               }
-
-              parsedItem[formattedKey] = value;
             });
             return parsedItem;
           });
