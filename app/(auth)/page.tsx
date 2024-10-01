@@ -29,7 +29,7 @@ const LoginPage: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "https://api.tenderonline.in/api/auth/admin/login",
+        "http://localhost:8080/api/auth/admin/login",
         formData,
       );
 

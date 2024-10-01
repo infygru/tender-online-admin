@@ -110,7 +110,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const onSubmit = async (data: ProductFormValues) => {
     console.log(data, "data");
     const response = await fetch(
-      `https://api.tenderonline.in/api/auth/create/account`,
+      `http://localhost:8080/api/auth/create/account`,
       {
         method: initialData ? "PUT" : "POST",
         headers: {

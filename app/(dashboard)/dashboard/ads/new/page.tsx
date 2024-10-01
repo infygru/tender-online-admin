@@ -33,7 +33,7 @@ const ImageUpload: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "https://api.tenderonline.in/api/ads/upload",
+        "http://localhost:8080/api/ads/upload",
         formData,
         {
           headers: {
