@@ -32,12 +32,12 @@ export default function Page({ searchParams }: paramsProps) {
     error,
     refetch,
   } = useQuery(["tender", { page, limit: pageLimit, country }], () =>
-    fetch(`http://localhost:8080/api/tender/all`).then((res) => res.json()),
+    fetch(`https://api.tenderonline.in/api/tender/all`).then((res) => res.json()),
   );
 
   const handletodelete = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/tender/delete", {
+      const response = await fetch("https://api.tenderonline.in/api/tender/delete", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
