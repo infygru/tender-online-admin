@@ -30,13 +30,14 @@ export default function Page() {
     error,
     refetch,
   } = useQuery<Ad[]>(["Ads"], () =>
-    fetch(`https://api.tenderonline.in/api/ads/images`).then((res) =>
+    fetch(`https://tender-online-h4lh.vercel.app/api/ads/images`).then((res) =>
       res.json(),
     ),
   );
 
   const deleteAd = useMutation(
-    (id: string) => axios.delete(`https://api.tenderonline.in/api/ads/${id}`),
+    (id: string) =>
+      axios.delete(`https://tender-online-h4lh.vercel.app/api/ads/${id}`),
     {
       onSuccess: () => {
         refetch();

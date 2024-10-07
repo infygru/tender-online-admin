@@ -32,7 +32,7 @@ export default function Page({ searchParams }: paramsProps) {
     error,
     refetch,
   } = useQuery(["tender", { page, limit: pageLimit, country }], () =>
-    fetch(`https://api.tenderonline.in/api/tender/all`).then((res) =>
+    fetch(`https://tender-online-h4lh.vercel.app/api/tender/all`).then((res) =>
       res.json(),
     ),
   );
@@ -40,7 +40,7 @@ export default function Page({ searchParams }: paramsProps) {
   const handletodelete = async () => {
     try {
       const response = await fetch(
-        "https://api.tenderonline.in/api/tender/delete",
+        "https://tender-online-h4lh.vercel.app/api/tender/delete",
         {
           method: "DELETE",
           headers: {
