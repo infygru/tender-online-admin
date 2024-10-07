@@ -36,7 +36,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       toast({
         title: "Tender deleted successfully.",
       });
-      window.location.reload();
+      typeof window !== "undefined" && window.location.reload();
     }
   };
   return (

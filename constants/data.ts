@@ -137,6 +137,12 @@ export const navItems: NavItem[] = [
     label: "tender",
   },
   {
+    title: "Tender Document Request",
+    href: "/dashboard/tender-document-request",
+    icon: "user",
+    label: "tenderDocumentRequest",
+  },
+  {
     title: "Ads",
     href: "/dashboard/ads",
     icon: "user",

@@ -30,7 +30,9 @@ export default function Page() {
     error,
     refetch,
   } = useQuery<Ad[]>(["Ads"], () =>
-    fetch(`https://api.tenderonline.in/api/ads/images`).then((res) => res.json()),
+    fetch(`https://api.tenderonline.in/api/ads/images`).then((res) =>
+      res.json(),
+    ),
   );
 
   const deleteAd = useMutation(
