@@ -39,9 +39,9 @@ export default function Page({ searchParams }: paramsProps) {
     error,
     refetch,
   } = useQuery(["tender", { page, limit: pageLimit, country }], () =>
-    fetch(
-      `https://tender-online-h4lh.vercel.app/api/tender/tender-mapping`,
-    ).then((res) => res.json()),
+    fetch(`http://localhost:8080/api/tender/tender-mapping`).then((res) =>
+      res.json(),
+    ),
   );
 
   if (isLoading) return <div>Loading...</div>;

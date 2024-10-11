@@ -29,7 +29,7 @@ const LoginPage: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "https://tender-online-h4lh.vercel.app/api/auth/admin/login",
+        "http://localhost:8080/api/auth/admin/login",
         formData,
       );
 
@@ -41,7 +41,7 @@ const LoginPage: React.FC = () => {
         router.push("/login");
       }
 
-      sessionStorage.setItem("authToken", token); // Store token for future use
+      sessionStorage.setItem("accessToken", token); // Store token for future use
       router.push("/dashboard/tender");
       console.log("Login successful!");
     } catch (error) {

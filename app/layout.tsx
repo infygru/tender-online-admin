@@ -18,8 +18,8 @@ export default function RootLayout({
   const navigate = useRouter();
 
   useEffect(() => {
-    // Check if the user is logged in by verifying if the authToken exists
-    const token = sessionStorage.getItem("authToken");
+    // Check if the user is logged in by verifying if the accessToken exists
+    const token = sessionStorage.getItem("accessToken");
     if (token) {
       setIsLoggedIn(true);
     } else {
