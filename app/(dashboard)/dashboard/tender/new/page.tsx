@@ -83,10 +83,10 @@ const App: React.FC = () => {
 
       try {
         const response = await axios.post(
-          "http://localhost:8080/api/tender/upload/bulk",
+          "https://tender-online-h4lh.vercel.app/api/tender/upload/bulk",
           chunk,
         );
-        //http://localhost:8080
+        //https://tender-online-h4lh.vercel.app
         if (response.status !== 201) {
           allDataUploaded = false;
           throw new Error(`Unexpected response status: ${response.status}`);

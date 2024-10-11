@@ -32,17 +32,22 @@ export default function Page({ searchParams }: paramsProps) {
     error,
     refetch,
   } = useQuery(["tender", { page, limit: pageLimit, country }], () =>
-    fetch(`http://localhost:8080/api/tender/all`).then((res) => res.json()),
+    fetch(`https://tender-online-h4lh.vercel.app/api/tender/all`).then((res) =>
+      res.json(),
+    ),
   );
 
   const handletodelete = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/tender/delete", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "https://tender-online-h4lh.vercel.app/api/tender/delete",
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
       if (response.ok) {
         refetch();
         toast({

@@ -10,7 +10,9 @@ const Page = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/blog");
+        const response = await fetch(
+          "https://tender-online-h4lh.vercel.app/api/blog",
+        );
         const data = await response.json();
         setBlogs(data);
       } catch (error) {
@@ -23,9 +25,12 @@ const Page = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/blog/${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `https://tender-online-h4lh.vercel.app/api/blog/${id}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);

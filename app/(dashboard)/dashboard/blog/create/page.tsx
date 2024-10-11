@@ -47,10 +47,13 @@ const Post: React.FC = () => {
       formData.append("introduction", formDataD.introduction);
       formData.append("conclusion", formDataD.conclusion);
 
-      const response = await fetch("http://localhost:8080/api/blog", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "https://tender-online-h4lh.vercel.app/api/blog",
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
 
       if (!response.ok) {
         toast({

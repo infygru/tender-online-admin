@@ -15,7 +15,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         formData.append(fieldName, file);
 
         const response = await axios.post(
-          "http://localhost:8080/api/upload-image",
+          "https://tender-online-h4lh.vercel.app/api/upload-image",
           formData,
           {
             headers: {
@@ -36,7 +36,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     const fetchPost = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/blog/${params.slug}`,
+          `https://tender-online-h4lh.vercel.app/api/blog/${params.slug}`,
         );
         setPost(response.data);
       } catch (error) {
@@ -53,7 +53,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/blog/${params.slug}`,
+        `https://tender-online-h4lh.vercel.app/api/blog/${params.slug}`,
         formData,
         {
           headers: {
