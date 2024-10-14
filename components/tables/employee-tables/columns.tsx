@@ -69,3 +69,35 @@ export const columns: ColumnDef<Employee>[] = [
     cell: ({ row }) => <CellAction data={row.original} />,
   },
 ];
+
+export const Usercolumns: any = [
+  {
+    Header: "Name",
+    accessor: "name",
+  },
+  {
+    Header: "Email",
+    accessor: "email",
+  },
+  {
+    Header: "Company",
+    accessor: "companyName",
+  },
+  {
+    Header: "Phone",
+    accessor: "phone",
+  },
+  {
+    Header: "Status",
+    accessor: "status",
+  },
+  {
+    Header: "Payment Status",
+    accessor: "paymentStatus",
+  },
+  {
+    Header: "Subscription Validity",
+    accessor: "subscriptionValidity",
+    Cell: ({ value }) => new Date(value).toLocaleDateString(),
+  },
+];

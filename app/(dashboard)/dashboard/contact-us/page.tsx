@@ -55,7 +55,7 @@ export default function Page({ searchParams }: paramsProps) {
           </div>
           <Separator />
           <div className="">
-            <UserList data={tender?.contacts} />
+            <UserList data={tender} />
           </div>
         </ScrollArea>
       </div>

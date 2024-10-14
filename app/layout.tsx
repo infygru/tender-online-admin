@@ -6,7 +6,7 @@ import "./globals.css";
 import ThemeProvider from "@/components/layout/ThemeToggle/theme-provider";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
+import "quill/dist/quill.core.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
@@ -30,6 +30,24 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
+
+        <link
+          href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css"
+          rel="stylesheet"
+        />
+        <link
+          href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.bubble.css"
+          rel="stylesheet"
+        />
+
+        <link
+          href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.core.css"
+          rel="stylesheet"
+        />
+        <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.core.js"></script>
+      </head>
       <body className={`${inter.className} overflow-hidden`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <Toaster />

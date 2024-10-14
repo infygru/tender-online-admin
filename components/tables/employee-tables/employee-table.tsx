@@ -36,13 +36,13 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  searchKey: string;
-  pageNo: number;
-  totalUsers: number;
+  columns?: ColumnDef<TData, TValue>[];
+  data?: TData[];
+  searchKey?: string;
+  pageNo?: number;
+  totalUsers?: number;
   pageSizeOptions?: number[];
-  pageCount: number;
+  pageCount?: number;
   searchParams?: {
     [key: string]: string | string[] | undefined;
   };

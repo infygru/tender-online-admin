@@ -160,6 +160,12 @@ export const navItems: NavItem[] = [
     icon: "user",
     label: "blog",
   },
+  {
+    title: "User Management",
+    href: "/dashboard/user-management",
+    icon: "user",
+    label: "userManagement",
+  },
   // {
   //   title: "Kanban",
   //   href: "/dashboard/kanban",

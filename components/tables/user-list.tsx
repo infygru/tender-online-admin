@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface Contact {
   _id: string;
@@ -19,8 +19,15 @@ interface UserListProps {
   };
 }
 
-const UserList: React.FC<any> = ({ data }: any) => {
-  const [contacts, setContacts] = useState<any[]>(data);
+const UserList: React.FC<UserListProps> = ({ data }) => {
+  const [contacts, setContacts] = useState<Contact[]>([]);
+
+  useEffect(() => {
+    // Initialize contacts state from data
+    if (data && data.contacts) {
+      setContacts(data.contacts);
+    }
+  }, [data]);
 
   const handleDelete = (id: string) => {
     // Simulate deletion logic
