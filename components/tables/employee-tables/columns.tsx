@@ -98,6 +98,6 @@ export const Usercolumns: any = [
   {
     Header: "Subscription Validity",
     accessor: "subscriptionValidity",
-    Cell: ({ value }) => new Date(value).toLocaleDateString(),
+    Cell: ({ value }: any) => new Date(value).toLocaleDateString(),
   },
 ];
