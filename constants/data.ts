@@ -166,6 +166,12 @@ export const navItems: NavItem[] = [
     icon: "user",
     label: "userManagement",
   },
+  {
+    title: "Banner",
+    href: "/dashboard/banner",
+    icon: "user",
+    label: "banner",
+  },
   // {
   //   title: "Kanban",
   //   href: "/dashboard/kanban",
