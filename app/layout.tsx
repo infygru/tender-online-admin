@@ -1,5 +1,4 @@
 "use client";
-import { Toaster } from "@/components/ui/toaster";
 import "@uploadthing/react/styles.css";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -7,6 +6,7 @@ import ThemeProvider from "@/components/layout/ThemeToggle/theme-provider";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import "quill/dist/quill.core.css";
+import { Toaster } from "sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
