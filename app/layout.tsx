@@ -6,7 +6,8 @@ import ThemeProvider from "@/components/layout/ThemeToggle/theme-provider";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import "quill/dist/quill.core.css";
-import { Toaster } from "sonner";
+import { Toaster } from "@/components/ui/toaster";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
@@ -51,6 +52,7 @@ export default function RootLayout({
       <body className={`${inter.className} overflow-hidden`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <Toaster />
+
           {children}
         </ThemeProvider>
       </body>

@@ -83,10 +83,10 @@ const App: React.FC = () => {
 
       try {
         const response = await axios.post(
-          "https://tender-online-h4lh.vercel.app/api/tender/upload/bulk",
+          "http://localhost:8080/api/tender/upload/bulk",
           chunk,
         );
-        //https://tender-online-h4lh.vercel.app
+        //http://localhost:8080
         if (response.status !== 201) {
           allDataUploaded = false;
           throw new Error(`Unexpected response status: ${response.status}`);
@@ -111,6 +111,7 @@ const App: React.FC = () => {
         variant: "default",
         description: "All data saved successfully.",
       });
+
       router.push("/dashboard/tender");
     }
   };

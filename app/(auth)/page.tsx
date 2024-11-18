@@ -29,7 +29,7 @@ const LoginPage: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "https://tender-online-h4lh.vercel.app/api/auth/admin/login",
+        "http://localhost:8080/api/auth/admin/login",
         formData,
       );
 
@@ -128,15 +128,6 @@ const LoginPage: React.FC = () => {
           </div>
           {error && <p className="text-center text-sm text-red-500">{error}</p>}
         </form>
-        <p className="mt-10 text-center text-sm text-gray-500">
-          Not a member?{" "}
-          <a
-            href="#"
-            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-          >
-            Start a 14-day free trial
-          </a>
-        </p>
       </div>
     </div>
   );

@@ -1,7 +1,8 @@
 "use client";
 import BreadCrumb from "@/components/breadcrumb";
 import { columns } from "@/components/tables/employee-tables/columns";
-import { EmployeeTable } from "@/components/tables/employee-tables/employee-table";
+import EmployeeTable from "@/components/tables/employee-tables/employee-table";
+
 import { buttonVariants } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
@@ -32,22 +33,17 @@ export default function Page({ searchParams }: paramsProps) {
     error,
     refetch,
   } = useQuery(["tender", { page, limit: pageLimit, country }], () =>
-    fetch(`https://tender-online-h4lh.vercel.app/api/tender/all`).then((res) =>
-      res.json(),
-    ),
+    fetch(`http://localhost:8080/api/tender/all`).then((res) => res.json()),
   );
 
   const handletodelete = async () => {
     try {
-      const response = await fetch(
-        "https://tender-online-h4lh.vercel.app/api/tender/delete",
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
+      const response = await fetch("http://localhost:8080/api/tender/delete", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+      });
       if (response.ok) {
         refetch();
         toast({

@@ -33,7 +33,7 @@ const ImageUpload: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "https://tender-online-h4lh.vercel.app/api/ads/upload",
+        "http://localhost:8080/api/ads/upload",
         formData,
         {
           headers: {

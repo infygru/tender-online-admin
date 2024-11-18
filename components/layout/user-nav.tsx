@@ -14,14 +14,14 @@ import {
 import { signOut, useSession } from "next-auth/react";
 const session: any = {
   user: {
-    name: "Gokula",
-    email: "gokula",
-  }
+    name: "Tender",
+    email: "Admin@tenderonline.com",
+  },
 };
 
 export function UserNav() {
   // const { data: session } = useSession();
-  
+
   if (session) {
     return (
       <DropdownMenu>
@@ -47,22 +47,6 @@ export function UserNav() {
               </p>
             </div>
           </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            <DropdownMenuItem>
-              Profile
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              Billing
-              <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              Settings
-              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuItem>New Team</DropdownMenuItem>
-          </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => signOut()}>
             Log out

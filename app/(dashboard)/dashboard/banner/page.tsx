@@ -38,9 +38,7 @@ export default function Page({ searchParams }: paramsProps) {
     error,
     refetch,
   } = useQuery(["tender", { page, limit: pageLimit }], () =>
-    fetch(`https://tender-online-h4lh.vercel.app/api/auth/banner`).then((res) =>
-      res.json(),
-    ),
+    fetch(`http://localhost:8080/api/auth/banner`).then((res) => res.json()),
   );
 
   useEffect(() => {
@@ -53,7 +51,7 @@ export default function Page({ searchParams }: paramsProps) {
 
   const updateMutation = useMutation(
     (data: { banner: string; isActive: boolean; isSignup: boolean }) =>
-      fetch("https://tender-online-h4lh.vercel.app/api/auth/banner", {
+      fetch("http://localhost:8080/api/auth/banner", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

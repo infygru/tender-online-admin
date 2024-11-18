@@ -49,7 +49,7 @@ const SendEmail = () => {
     try {
       // Make an HTTP request to the specified endpoint.
       const response = await axios.post(
-        "https://tender-online-h4lh.vercel.app/api/email/all",
+        "http://localhost:8080/api/email/all",
         values,
       );
       if (response.data.status === "success") {
