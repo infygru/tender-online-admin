@@ -10,7 +10,7 @@ const Page = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/blog");
+        const response = await fetch("https://tender-online.vercel.app/api/blog");
         const data = await response.json();
         setBlogs(data);
       } catch (error) {
@@ -23,7 +23,7 @@ const Page = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/blog/${id}`, {
+      const response = await fetch(`https://tender-online.vercel.app/api/blog/${id}`, {
         method: "DELETE",
       });
 

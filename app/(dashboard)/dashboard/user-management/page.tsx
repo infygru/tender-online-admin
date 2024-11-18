@@ -46,7 +46,7 @@ const fetchUsers = async (
   search: string | null,
 ) => {
   const res = await fetch(
-    `http://localhost:8080/api/auth/users?page=${page}&limit=${limit}&search=${search || ""}`,
+    `https://tender-online.vercel.app/api/auth/users?page=${page}&limit=${limit}&search=${search || ""}`,
   );
   if (!res.ok) throw new Error("Failed to fetch users");
   return res.json();
@@ -54,7 +54,7 @@ const fetchUsers = async (
 
 // API to delete user
 const deleteUser = async (userId: string) => {
-  const res = await fetch(`http://localhost:8080/api/auth/users/${userId}`, {
+  const res = await fetch(`https://tender-online.vercel.app/api/auth/users/${userId}`, {
     method: "DELETE",
   });
   if (!res.ok) throw new Error("Failed to delete user");
@@ -67,7 +67,7 @@ const updateUserStatus = async (
   newStatus: "active" | "inactive",
 ) => {
   const res = await fetch(
-    `http://localhost:8080/api/auth/users/${userId}/status`,
+    `https://tender-online.vercel.app/api/auth/users/${userId}/status`,
     {
       method: "PATCH",
       headers: {
@@ -106,7 +106,7 @@ export default function Page({ searchParams }: ParamsProps) {
 
   const handletoStatusUser = async (userId: any, status: string) => {
     const response = await axios.patch(
-      `http://localhost:8080/api/auth/users/${userId}/status`,
+      `https://tender-online.vercel.app/api/auth/users/${userId}/status`,
       {
         status: status === "active" ? "inactive" : "active",
       },

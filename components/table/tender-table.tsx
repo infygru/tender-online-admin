@@ -298,7 +298,7 @@ export const columns: ColumnDef<Tender>[] = [
 ];
 const fetchTenders = async (queryParams: URLSearchParams): Promise<any> => {
   const response = await fetch(
-    `http://localhost:8080/api/tender/all?${queryParams.toString()}`,
+    `https://tender-online.vercel.app/api/tender/all?${queryParams.toString()}`,
   );
   if (!response.ok) {
     toast.error("Failed to fetch tenders");
@@ -372,7 +372,7 @@ export function DataTableTender({ setSearch, search }: any) {
   const [dateRange, setDateRange] = React.useState<DateRange | null>(null);
   const [tenders, setTenders] = React.useState<any | null>(null);
   const fetchTenders = async () => {
-    const response = await axios.get("http://localhost:8080/api/tender/all");
+    const response = await axios.get("https://tender-online.vercel.app/api/tender/all");
     setTenders(response.data);
     return response.data;
   };
@@ -435,7 +435,7 @@ export function DataTableTender({ setSearch, search }: any) {
 
   // Fetch user details dynamically
   const fetchUserDetails = async (
-    url: string = "http://localhost:8080/api/auth/me",
+    url: string = "https://tender-online.vercel.app/api/auth/me",
   ): Promise<any | null> => {
     try {
       const token = getaccessToken();

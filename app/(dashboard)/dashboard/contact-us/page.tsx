@@ -32,7 +32,7 @@ export default function Page({ searchParams }: paramsProps) {
     error,
     refetch,
   } = useQuery(["tender", { page, limit: pageLimit, country }], () =>
-    fetch(`http://localhost:8080/api/tender/contact`).then((res) => res.json()),
+    fetch(`https://tender-online.vercel.app/api/tender/contact`).then((res) => res.json()),
   );
 
   if (isLoading) return <div>Loading...</div>;
