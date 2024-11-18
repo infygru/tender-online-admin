@@ -2,7 +2,7 @@
 import BreadCrumb from "@/components/breadcrumb";
 import Documents from "@/components/tables/documents";
 import { columns } from "@/components/tables/employee-tables/columns";
-import { EmployeeTable } from "@/components/tables/employee-tables/employee-table";
+
 import { buttonVariants } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { ScrollArea } from "@/components/ui/scroll-area";
