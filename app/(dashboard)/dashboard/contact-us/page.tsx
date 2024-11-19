@@ -32,7 +32,9 @@ export default function Page({ searchParams }: paramsProps) {
     error,
     refetch,
   } = useQuery(["tender", { page, limit: pageLimit, country }], () =>
-    fetch(`https://tender-online.vercel.app/api/tender/contact`).then((res) => res.json()),
+    fetch(`https://tender-online.vercel.app/api/tender/contact`).then((res) =>
+      res.json(),
+    ),
   );
 
   if (isLoading) return <div>Loading...</div>;
@@ -45,12 +47,6 @@ export default function Page({ searchParams }: paramsProps) {
         <BreadCrumb items={breadcrumbItems} />
 
         <ScrollArea className="h-[80vh]">
-          <div className="flex items-start justify-between space-x-4">
-            <Heading
-              title={`Tender Documents Request (${totalUsers})`}
-              description="List of all tender documents request"
-            />
-          </div>
           <Separator />
           <div className="">
             <UserList data={tender} />

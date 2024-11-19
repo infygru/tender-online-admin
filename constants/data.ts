@@ -178,6 +178,12 @@ export const navItems: NavItem[] = [
     icon: "user",
     label: "emailNotification",
   },
+  {
+    title: "Transaction",
+    href: "/dashboard/transaction",
+    icon: "user",
+    label: "transaction",
+  },
   // {
   //   title: "Kanban",
   //   href: "/dashboard/kanban",

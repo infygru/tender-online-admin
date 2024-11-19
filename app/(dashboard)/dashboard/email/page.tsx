@@ -81,7 +81,7 @@ const SendEmail = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>email</FormLabel>
+                  <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter User Email ID" {...field} />
                   </FormControl>
@@ -109,11 +109,11 @@ const SendEmail = () => {
               name="html_template"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Html Template</FormLabel>
+                  <FormLabel>Message</FormLabel>
                   <FormControl>
                     <Textarea
                       rows={8}
-                      placeholder="Enter a html Template"
+                      placeholder="Enter a Message"
                       {...field}
                     />
                   </FormControl>
@@ -122,7 +122,9 @@ const SendEmail = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button className="text-white" type="submit">
+              Submit
+            </Button>
           </form>
         </Form>
       </div>

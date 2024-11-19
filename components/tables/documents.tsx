@@ -19,7 +19,7 @@ const Documents = ({ data }: any) => {
               <h2 className="text-xl font-semibold">
                 {tender?.tenderName || "No Tender Name"}
               </h2>
-              <p className="text-gray-700">
+              {/* <p className="text-gray-700">
                 {tender?.WorkDescription || "No Description Available"}
               </p>
               <p className="text-gray-500">
@@ -74,8 +74,22 @@ const Documents = ({ data }: any) => {
               </p>
               <p className="text-gray-500">
                 Updated At: {document.updatedAt || "N/A"}
+              </p> */}
+              <p className="text-gray-500">
+                Tender Id: {tender?.tenderId || "N/A"}
               </p>
 
+              <p className="text-gray-500">
+                Client Id: {user?.clientId || "N/A"}
+              </p>
+              <p className="text-gray-500">
+                Contact Person: {user?.name || "N/A"}
+              </p>
+              <p className="text-gray-500">Phone: {user?.phone || "N/A"}</p>
+              <p className="text-gray-500">Email: {user?.email || "N/A"}</p>
+              <p className="text-gray-500">
+                Requested On: {document.createdAt || "N/A"}
+              </p>
               <div className="mt-4 flex space-x-4">
                 <a
                   href={`mailto:${user?.email}`}

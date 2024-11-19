@@ -67,8 +67,8 @@ export default function Page({ searchParams }: paramsProps) {
 
         <div className="flex items-start justify-between">
           <Heading
-            title={`Tender (${totalUsers})`}
-            description="Manage tender (Server side table functionalities.)"
+            title={`Total Tender (${totalUsers})`}
+            description=""
           />
 
           <Link
