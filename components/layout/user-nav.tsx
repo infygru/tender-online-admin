@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 const session: any = {
   user: {
     name: "Tender",
@@ -20,8 +21,12 @@ const session: any = {
 };
 
 export function UserNav() {
+  const router = useRouter();
   // const { data: session } = useSession();
-
+  const LogOut = () => {
+    sessionStorage.removeItem("accessToken");
+    router.push("/");
+  };
   if (session) {
     return (
       <DropdownMenu>
@@ -48,7 +53,7 @@ export function UserNav() {
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => signOut()}>
+          <DropdownMenuItem onClick={() => LogOut()}>
             Log out
             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
           </DropdownMenuItem>
