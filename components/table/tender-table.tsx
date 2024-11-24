@@ -326,6 +326,17 @@ export function DataTableTender({ setSearch, search }: any) {
     setTenders(response.data);
     return response.data;
   };
+  const [selectedRow, setSelectedRow] = React.useState<any>([]);
+  console.log(selectedRow, "selectedRow");
+
+  React.useEffect(() => {
+    if (rowSelection) {
+      const selectedRow = table?.getSelectedRowModel()?.rows;
+
+      const ids = selectedRow.map((row: any) => row.original._id);
+      setSelectedRow(ids);
+    }
+  }, [rowSelection]); // Only re-run when `table` changes (i.e., when the table is fully initialized)
 
   React.useEffect(() => {
     fetchTenders();
@@ -389,8 +400,19 @@ export function DataTableTender({ setSearch, search }: any) {
   const handleRowClick = (rowData: Tender) => {
     setSelectedRowData(rowData); // Set the clicked row data to state
   };
+
+  const handletoDeleteSelecteddata = () => {
+    selectedRow.map((id: any) => {
+      handleTodelete(id);
+    });
+  };
   return (
     <div className="w-full rounded-xl border">
+      {selectedRow.length > 0 && (
+        <Button className=" mx-3 my-3" onClick={handletoDeleteSelecteddata}>
+          Delete Select Tenders
+        </Button>
+      )}
       <div className="">
         <ScrollArea className="">
           <Table>

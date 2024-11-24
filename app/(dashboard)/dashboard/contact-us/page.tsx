@@ -1,16 +1,15 @@
 "use client";
 import BreadCrumb from "@/components/breadcrumb";
-import Documents from "@/components/tables/documents";
 import UserList from "@/components/tables/user-list";
-import { Heading } from "@/components/ui/heading";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { useState } from "react";
 import { useQuery } from "react-query";
 
 const breadcrumbItems = [
   {
-    title: "Tender Documents Request",
-    link: "/dashboard/tender-document-request",
+    title: "Contact Us",
+    link: "/dashboard/contact-us",
   },
 ];
 
@@ -25,16 +24,17 @@ export default function Page({ searchParams }: paramsProps) {
   const pageLimit = Number(searchParams.limit) || 10;
   const country = searchParams.search || null;
   const offset = (page - 1) * pageLimit;
+  const [activeTab, setActiveTab] = useState("support");
 
   const {
     data: tender,
     isLoading,
     error,
     refetch,
-  } = useQuery(["tender", { page, limit: pageLimit, country }], () =>
-    fetch(`https://tender-online.vercel.app/api/tender/contact`).then((res) =>
-      res.json(),
-    ),
+  } = useQuery(["tender", { page, limit: pageLimit, country, activeTab }], () =>
+    fetch(
+      `https://tender-online.vercel.app/api/tender/contact?filter=${activeTab}`,
+    ).then((res) => res.json()),
   );
 
   if (isLoading) return <div>Loading...</div>;
@@ -49,7 +49,11 @@ export default function Page({ searchParams }: paramsProps) {
         <ScrollArea className="h-[80vh]">
           <Separator />
           <div className="">
-            <UserList data={tender} />
+            <UserList
+              setActiveTab={setActiveTab}
+              activeTab={activeTab}
+              data={tender}
+            />
           </div>
         </ScrollArea>
       </div>

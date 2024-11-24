@@ -24,7 +24,7 @@ type paramsProps = {
 };
 
 export default function Page({ searchParams }: paramsProps) {
-  const [banner, setBanner] = useState<string>("");
+  const [banner, setBanner] = useState<any>("");
   const [isActive, setIsActive] = useState<boolean>(false);
   const [isSignup, setIsSignup] = useState<boolean>(false);
 
@@ -38,9 +38,12 @@ export default function Page({ searchParams }: paramsProps) {
     error,
     refetch,
   } = useQuery(["tender", { page, limit: pageLimit }], () =>
-    fetch(`https://tender-online.vercel.app/api/auth/banner`).then((res) => res.json()),
+    fetch(`https://tender-online.vercel.app/api/auth/banner`).then((res) =>
+      res.json(),
+    ),
   );
-
+  const [bannerImage, setBannerImage] = useState<any>("");
+  const [bannerUrl, setBannerUrl] = useState<any>("");
   useEffect(() => {
     if (tender) {
       setBanner(tender.banner.banner);
@@ -175,9 +178,139 @@ export default function Page({ searchParams }: paramsProps) {
                 </Button>
               </div>
             </div>
+
+            <div className="mt-6 space-y-4 rounded-3xl border px-8 py-3">
+              <ImageUpload />
+            </div>
           </div>
         </ScrollArea>
       </div>
     </>
   );
 }
+
+import axios from "axios";
+import { useRouter } from "next/navigation";
+
+const ImageUpload: React.FC = () => {
+  const router = useRouter();
+  const { data, error } = useQuery("images", () =>
+    fetch("https://tender-online.vercel.app/api/ads/banner/images").then(
+      (res) => res.json(),
+    ),
+  );
+
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [url, setUrl] = useState<string | any>(null);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!selectedFile) {
+      toast({
+        title: "No File Selected",
+        variant: "destructive",
+        description: "Please select a file to upload.",
+      });
+      return;
+    }
+
+    if (!url) {
+      toast({
+        title: "No URL Entered",
+        variant: "destructive",
+        description: "Please enter a URL for the image.",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append("image", selectedFile);
+    formData.append("url", url);
+
+    try {
+      const response = await axios.put(
+        "https://tender-online.vercel.app/api/ads/banner/upload/" + data[0]._id,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+
+      if (response.status === 200) {
+        toast({
+          title: "Upload Successful",
+          variant: "default",
+          description: "Image uploaded successfully.",
+        });
+      } else {
+        throw new Error(`Unexpected response status: ${response.status}`);
+      }
+    } catch (error: any) {
+      console.error("Error uploading image:", error);
+      toast({
+        title: "Upload Error",
+        variant: "destructive",
+        description:
+          error.response?.data?.message ||
+          "Failed to upload image. Please try again.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    if (data) {
+      setSelectedFile(data[0].imageUrl);
+      setUrl(data[0].url);
+    }
+  }, [data]);
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+  return (
+    <div className="container mx-auto my-8">
+      <div className="mb-4">
+        <h1 className="text-2xl font-bold">Upload Ad Image</h1>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          className="mt-4"
+        />
+        {/*  show selected image  */}
+        {selectedFile && (
+          <img
+            src={
+              selectedFile instanceof File
+                ? URL.createObjectURL(selectedFile)
+                : selectedFile
+            }
+            alt="Selected Image"
+            className="mt-4"
+          />
+        )}
+        <br />
+        <Input
+          value={url}
+          type="text"
+          placeholder="Enter URL"
+          onChange={(e) => setUrl(e.target.value)}
+          className="mt-4 "
+        />
+      </div>
+      <Button onClick={handleUpload} disabled={isLoading} className="mt-4">
+        {isLoading ? "Uploading..." : "Upload Image"}
+      </Button>
+    </div>
+  );
+};

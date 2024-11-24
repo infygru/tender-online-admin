@@ -112,24 +112,6 @@ export type Employee = {
 };
 
 export const navItems: NavItem[] = [
-  // {
-  //   title: "Dashboard",
-  //   href: "/dashboard",
-  //   icon: "dashboard",
-  //   label: "Dashboard",
-  // },
-  // {
-  //   title: "User",
-  //   href: "/dashboard/user",
-  //   icon: "user",
-  //   label: "user",
-  // },
-  // {
-  //   title: "Employee",
-  //   href: "/dashboard/employee",
-  //   icon: "employee",
-  //   label: "employee",
-  // },
   {
     title: "Tender",
     href: "/dashboard/tender",
@@ -139,25 +121,25 @@ export const navItems: NavItem[] = [
   {
     title: "Tender Document Request",
     href: "/dashboard/tender-document-request",
-    icon: "user",
+    icon: "file",
     label: "tenderDocumentRequest",
   },
   {
     title: "Ads",
     href: "/dashboard/ads",
-    icon: "user",
+    icon: "gem",
     label: "tender",
   },
   {
     title: "Contact Us",
     href: "/dashboard/contact-us",
-    icon: "user",
+    icon: "users",
     label: "contactUs",
   },
   {
     title: "Blog",
     href: "/dashboard/blog",
-    icon: "user",
+    icon: "rss",
     label: "blog",
   },
   {
@@ -169,27 +151,21 @@ export const navItems: NavItem[] = [
   {
     title: "Banner",
     href: "/dashboard/banner",
-    icon: "user",
+    icon: "bookX",
     label: "banner",
   },
   {
     title: "Email Notification",
     href: "/dashboard/email",
-    icon: "user",
+    icon: "bell",
     label: "emailNotification",
   },
   {
     title: "Transaction",
     href: "/dashboard/transaction",
-    icon: "user",
+    icon: "pay",
     label: "transaction",
   },
-  // {
-  //   title: "Kanban",
-  //   href: "/dashboard/kanban",
-  //   icon: "kanban",
-  //   label: "kanban",
-  // },
   {
     title: "Login",
     href: "/",

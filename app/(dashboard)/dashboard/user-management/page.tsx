@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BreadCrumb from "@/components/breadcrumb";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
@@ -37,6 +37,7 @@ type User = {
   subscriptionValidity: string;
   companyName: string;
   paymentStatus: string;
+  clientId: string;
 };
 
 // API fetch users
@@ -54,9 +55,12 @@ const fetchUsers = async (
 
 // API to delete user
 const deleteUser = async (userId: string) => {
-  const res = await fetch(`https://tender-online.vercel.app/api/auth/users/${userId}`, {
-    method: "DELETE",
-  });
+  const res = await fetch(
+    `https://tender-online.vercel.app/api/auth/users/${userId}`,
+    {
+      method: "DELETE",
+    },
+  );
   if (!res.ok) throw new Error("Failed to delete user");
   return res.json();
 };
@@ -93,16 +97,20 @@ export default function Page({ searchParams }: ParamsProps) {
 
   const page = Number(searchParams.page) || 1;
   const pageLimit = Number(searchParams.limit) || 10;
-  const search = (searchParams.search as string) || null;
+  const [search, setSearch] = useState<string | null>(null);
 
-  const { data, isLoading, error, refetch } = useQuery(
-    ["users", { page, limit: pageLimit, search }],
+  const { data, error, refetch } = useQuery(
+    ["users", { page, limit: pageLimit }],
     () => fetchUsers(page, pageLimit, search),
     {
       refetchOnWindowFocus: false,
       retry: 1,
     },
   );
+
+  useEffect(() => {
+    refetch();
+  }, [search]);
 
   const handletoStatusUser = async (userId: any, status: string) => {
     const response = await axios.patch(
@@ -151,7 +159,7 @@ export default function Page({ searchParams }: ParamsProps) {
     setSelectedUser(null);
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (!data) return <div>Loading...</div>;
   if (error) return <div>Error loading data.</div>;
 
   const users: User[] = data || [];
@@ -159,10 +167,11 @@ export default function Page({ searchParams }: ParamsProps) {
   return (
     <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
       <BreadCrumb items={breadcrumbItems} />
+
       <ScrollArea className="h-[80vh]">
         <div className="flex items-start justify-between space-x-4">
           <Heading
-            title={`User Management (${data?.total || 0})`}
+            title={`All User  (${data?.total || 0})`}
             description="Manage all users, view their details and update statuses."
           />
           <Link href="/dashboard/user-management/create">
@@ -172,12 +181,25 @@ export default function Page({ searchParams }: ParamsProps) {
           </Link>
         </div>
         <Separator />
-
+        {/*  add search  */}
+        <div className="mt-4 flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <input
+              onChange={(e) => setSearch(e.target.value)}
+              type="text"
+              placeholder="Search by name, email, phone, etc."
+              className="w-96 rounded-lg border border-gray-200 px-4 py-2"
+            />
+            <Button>Search</Button>
+          </div>
+        </div>
         {/* User list with improved table design */}
         <div className="mt-4 overflow-x-auto">
           <table className="min-w-full rounded-lg border border-gray-200 text-left text-sm">
             <thead className="bg-gray-50">
               <tr className="text-gray-700">
+                {/* // client Id */}
+                <th className="border-b px-4 py-2">Client Id</th>
                 <th className="border-b px-4 py-2">Name</th>
                 <th className="border-b px-4 py-2">Email</th>
                 <th className="border-b px-4 py-2">Phone</th>
@@ -193,6 +215,7 @@ export default function Page({ searchParams }: ParamsProps) {
                   className="cursor-pointer hover:bg-gray-100"
                   onClick={() => handleRowClick(user)}
                 >
+                  <td className="border-b px-4 py-2">{user.clientId}</td>
                   <td className="border-b px-4 py-2">{user.name}</td>
                   <td className="border-b px-4 py-2">{user.email}</td>
                   <td className="border-b px-4 py-2">{user.phone}</td>

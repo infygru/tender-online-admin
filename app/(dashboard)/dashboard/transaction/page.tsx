@@ -62,6 +62,16 @@ const TransactionPage: React.FC = () => {
     );
   }
 
+  if (!data?.length) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-100">
+        <div className="text-xl font-semibold text-gray-600">
+          No transactions found
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <h1 className="mb-6 text-center text-3xl font-bold text-gray-800">
@@ -76,22 +86,22 @@ const TransactionPage: React.FC = () => {
             {/* User Details Section */}
             <div className="mb-4 flex items-center">
               <img
-                src={transaction.userId.profile_image}
-                alt={`${transaction.userId.name}'s profile`}
+                src={transaction.userId?.profile_image}
+                alt={`${transaction.userId?.name}'s profile`}
                 className="h-16 w-16 rounded-full border"
               />
               <div className="ml-4">
                 <h2 className="text-lg font-semibold text-gray-800">
-                  {transaction.userId.name}
+                  {transaction.userId?.name}
                 </h2>
                 <p className="text-sm text-gray-600">
-                  {transaction.userId.companyName} | {transaction.userId.city},{" "}
-                  {transaction.userId.state.join(", ")}
+                  {transaction.userId?.companyName} | {transaction.userId?.city}
+                  , {transaction.userId?.state.join(", ")}
                 </p>
                 <p className="text-sm text-gray-500">
                   Subscription valid till:{" "}
                   {new Date(
-                    transaction.userId.subscriptionValidity,
+                    transaction.userId?.subscriptionValidity,
                   ).toLocaleDateString()}
                 </p>
               </div>
@@ -155,16 +165,16 @@ const TransactionPage: React.FC = () => {
             {/* Contact Buttons Section */}
             <div className="flex gap-4">
               <a
-                href={`mailto:${transaction.userId.email}`}
+                href={`mailto:${transaction.userId?.email}`}
                 className="rounded-lg bg-blue-600 px-4 py-2 text-white shadow transition hover:bg-blue-700"
               >
-                Email: {transaction.userId.email}
+                Email: {transaction.userId?.email}
               </a>
               <a
-                href={`tel:${transaction.userId.phone}`}
+                href={`tel:${transaction.userId?.phone}`}
                 className="rounded-lg bg-green-600 px-4 py-2 text-white shadow transition hover:bg-green-700"
               >
-                Phone: {transaction.userId.phone}
+                Phone: {transaction.userId?.phone}
               </a>
             </div>
           </div>

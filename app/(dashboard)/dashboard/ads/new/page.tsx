@@ -4,14 +4,16 @@ import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import { Input } from "@/components/ui/input";
 
 const ImageUpload: React.FC = () => {
   const router = useRouter();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [url, setUrl] = useState<string | any>(null);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+
     if (file) {
       setSelectedFile(file);
     }
@@ -30,6 +32,7 @@ const ImageUpload: React.FC = () => {
     setIsLoading(true);
     const formData = new FormData();
     formData.append("image", selectedFile);
+    formData.append("url", url);
 
     try {
       const response = await axios.post(
@@ -75,6 +78,13 @@ const ImageUpload: React.FC = () => {
           accept="image/*"
           onChange={handleFileChange}
           className="mt-4"
+        />
+        <br />
+        <Input
+          type="text"
+          placeholder="Enter URL"
+          onChange={(e) => setUrl(e.target.value)}
+          className="mt-4 "
         />
       </div>
       <Button onClick={handleUpload} disabled={isLoading} className="mt-4">

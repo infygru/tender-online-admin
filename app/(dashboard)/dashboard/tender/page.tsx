@@ -5,6 +5,7 @@ import EmployeeTable from "@/components/tables/employee-tables/employee-table";
 
 import { buttonVariants } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/components/ui/use-toast";
 import { Employee } from "@/constants/data";
@@ -33,17 +34,22 @@ export default function Page({ searchParams }: paramsProps) {
     error,
     refetch,
   } = useQuery(["tender", { page, limit: pageLimit, country }], () =>
-    fetch(`https://tender-online.vercel.app/api/tender/all`).then((res) => res.json()),
+    fetch(`https://tender-online.vercel.app/api/tender/all`).then((res) =>
+      res.json(),
+    ),
   );
 
   const handletodelete = async () => {
     try {
-      const response = await fetch("https://tender-online.vercel.app/api/tender/delete", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "https://tender-online.vercel.app/api/tender/delete",
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
       if (response.ok) {
         refetch();
         toast({
@@ -66,10 +72,7 @@ export default function Page({ searchParams }: paramsProps) {
         <BreadCrumb items={breadcrumbItems} />
 
         <div className="flex items-start justify-between">
-          <Heading
-            title={`Total Tender (${totalUsers})`}
-            description=""
-          />
+          <Heading title={`Total Tender (${totalUsers})`} description="" />
 
           <Link
             href={"/dashboard/tender/new"}
@@ -86,15 +89,16 @@ export default function Page({ searchParams }: paramsProps) {
           </button>
         </div>
         <Separator />
-
-        <EmployeeTable
-          searchKey="country"
-          pageNo={page}
-          columns={columns}
-          totalUsers={totalUsers}
-          data={tender?.result}
-          pageCount={totalUsers / pageLimit}
-        />
+        <ScrollArea className="h-[75vh]">
+          <EmployeeTable
+            searchKey="country"
+            pageNo={page}
+            columns={columns}
+            totalUsers={totalUsers}
+            data={tender?.result}
+            pageCount={totalUsers / pageLimit}
+          />
+        </ScrollArea>
       </div>
     </>
   );

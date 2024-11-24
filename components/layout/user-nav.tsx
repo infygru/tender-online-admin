@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 const session: any = {
   user: {
     name: "Tender",
-    email: "Admin@tenderonline.com",
+    email: "admin@tenderonline.co.in",
   },
 };
 

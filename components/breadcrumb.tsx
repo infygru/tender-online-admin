@@ -16,7 +16,7 @@ export default function BreadCrumb({ items }: BreadCrumbPropsType) {
   return (
     <div className="mb-4 flex items-center space-x-1 text-sm text-muted-foreground">
       <Link
-        href={"/dashboard"}
+        href={"/dashboard/tender"}
         className="overflow-hidden text-ellipsis whitespace-nowrap"
       >
         Dashboard
@@ -29,7 +29,7 @@ export default function BreadCrumb({ items }: BreadCrumbPropsType) {
             className={cn(
               "font-medium",
               index === items.length - 1
-                ? "text-foreground pointer-events-none"
+                ? "pointer-events-none text-foreground"
                 : "text-muted-foreground",
             )}
           >
