@@ -105,7 +105,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
- const columns: ColumnDef<any>[] = [
+const columns: ColumnDef<any>[] = [
   {
     accessorKey: "tenderId.tenderName",
     header: "Tender Title",
@@ -177,22 +177,22 @@ function DataTableDemo({ data }: any) {
     },
   });
 
-  if (!table) {
+  if (!data) {
     return null;
   }
 
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
-        <Input
+        {/* <Input
           placeholder="Filter emails..."
           value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("email")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
-        />
-        <DropdownMenu>
+        /> */}
+        {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
               Columns <ChevronDown />
@@ -217,7 +217,7 @@ function DataTableDemo({ data }: any) {
                 );
               })}
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
       </div>
       <div className="rounded-md border">
         <Table>

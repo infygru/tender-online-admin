@@ -38,6 +38,7 @@ type User = {
   companyName: string;
   paymentStatus: string;
   clientId: string;
+  improvement: string;
 };
 
 // API fetch users
@@ -287,6 +288,7 @@ export default function Page({ searchParams }: ParamsProps) {
               </p>
               <p>Company: {selectedUser.companyName}</p>
               <p>Payment Status: {selectedUser.paymentStatus}</p>
+              <p>improvement: {selectedUser?.improvement || "-"}</p>
             </div>
           </DialogContent>
         </Dialog>

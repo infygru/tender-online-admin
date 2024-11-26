@@ -8,7 +8,6 @@ import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
 
 const breadcrumbItems = [
   {
@@ -191,10 +190,12 @@ export default function Page({ searchParams }: paramsProps) {
 
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { Label } from "@/components/ui/label";
+import { toast } from "@/components/ui/use-toast";
 
 const ImageUpload: React.FC = () => {
   const router = useRouter();
-  const { data, error } = useQuery("images", () =>
+  const { data, refetch, error } = useQuery("images", () =>
     fetch("https://tender-online.vercel.app/api/ads/banner/images").then(
       (res) => res.json(),
     ),
@@ -280,7 +281,30 @@ const ImageUpload: React.FC = () => {
   return (
     <div className="container mx-auto my-8">
       <div className="mb-4">
-        <h1 className="text-2xl font-bold">Upload Ad Image</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold">Upload Ad Image</h1>
+          <div className="flex items-center space-x-2">
+            <Switch
+              checked={data[0]?.active}
+              onCheckedChange={async () => {
+                const response = await axios.put(
+                  "http://localhost:8080/api/ads/banner/upload/" + data[0]._id,
+                  {
+                    active: !data[0].active,
+                  },
+                );
+                refetch();
+                console.log(response, "response");
+                toast({
+                  title: "Success",
+                  description: "Image updated successfully.",
+                });
+              }}
+              id="airplane-mode"
+            />
+            <Label htmlFor="airplane-mode">Is Image show</Label>
+          </div>
+        </div>
         <input
           type="file"
           accept="image/*"
