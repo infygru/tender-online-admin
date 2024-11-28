@@ -288,7 +288,8 @@ const ImageUpload: React.FC = () => {
               checked={data[0]?.active}
               onCheckedChange={async () => {
                 const response = await axios.put(
-                  "http://localhost:8080/api/ads/banner/upload/" + data[0]._id,
+                  "https://tender-online.vercel.app/api/ads/banner/upload/" +
+                    data[0]._id,
                   {
                     active: !data[0].active,
                   },
