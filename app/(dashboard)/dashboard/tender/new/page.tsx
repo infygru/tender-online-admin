@@ -30,6 +30,8 @@ const App: React.FC = () => {
   const [uploadMessage, setUploadMessage] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
+  const [processingProgress, setProcessingProgress] = useState(0);
+
   const router = useRouter();
 
   // Memoize visible rows calculation
@@ -61,27 +63,59 @@ const App: React.FC = () => {
           new Blob(
             [
               `
-          importScripts('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js');
-          onmessage = function(e) {
-            const binaryString = e.data;
-            const workbook = XLSX.read(binaryString, { type: 'binary' });
-            const sheetName = workbook.SheetNames[0];
-            const sheet = workbook.Sheets[sheetName];
-            const rawData = XLSX.utils.sheet_to_json(sheet);
-            
-            const parsedData = rawData.map(item => {
-              const parsedItem = {};
-              Object.keys(item).forEach(key => {
-                const formattedKey = key.replace(/\\s/g, '');
-                const value = item[key];
-                parsedItem[formattedKey] = value != null ? String(value) : '';
-              });
-              return parsedItem;
-            });
-            
-            postMessage(parsedData);
-          }
-        `,
+              importScripts('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js');
+              onmessage = function(e) {
+                const binaryString = e.data;
+                const workbook = XLSX.read(binaryString, { type: 'binary' });
+                const sheetName = workbook.SheetNames[0];
+                const sheet = workbook.Sheets[sheetName];
+                
+                // More granular progress tracking
+                const rawData = XLSX.utils.sheet_to_json(sheet, {
+                  defval: '',
+                  cellDates: true,
+                  raw: false
+                });
+                
+                // Break processing into stages for more granular progress
+                const stages = [
+                  { name: 'Parsing Metadata', progress: 30 },
+                  { name: 'Formatting Data', progress: 70 },
+                  { name: 'Finalizing', progress: 90 }
+                ];
+      
+                // Simulate stage-based progress
+                stages.forEach(stage => {
+                  self.postMessage({ 
+                    type: 'progress', 
+                    progress: stage.progress, 
+                    message: stage.name 
+                  });
+                  
+                  // Simulate some processing time
+                  const start = Date.now();
+                  while (Date.now() - start < 300) {} // Artificial delay
+                });
+                
+                const parsedData = rawData.map(item => {
+                  const parsedItem = {};
+                  Object.keys(item).forEach(key => {
+                    const formattedKey = key.replace(/\\s/g, '');
+                    const value = item[key];
+                    parsedItem[formattedKey] = value != null ? String(value) : '';
+                  });
+                  return parsedItem;
+                });
+                
+                // Final progress and data
+                postMessage({ 
+                  type: 'data', 
+                  data: parsedData,
+                  progress: 100,
+                  message: 'Complete' 
+                });
+              }
+            `,
             ],
             { type: "application/javascript" },
           ),
@@ -89,21 +123,28 @@ const App: React.FC = () => {
       );
 
       worker.onmessage = (e) => {
-        setData(e.data);
-        loadingToast.dismiss();
-        setIsUploading(false);
-        toast({
-          title: "File Uploaded",
-          variant: "default",
-          description: `Loaded ${e.data.length} rows of data`,
-        });
-        worker.terminate();
+        if (e.data.type === "progress") {
+          setProcessingProgress(e.data.progress);
+          setUploadMessage(e.data.message);
+        } else if (e.data.type === "data") {
+          setData(e.data.data);
+          setProcessingProgress(100);
+          setUploadMessage("Processing Complete");
+
+          toast({
+            title: "File Uploaded",
+            variant: "default",
+            description: `Loaded ${e.data.data.length} rows of data`,
+          });
+          worker.terminate();
+        }
       };
 
       worker.onerror = (error) => {
         console.error("Worker error:", error);
         loadingToast.dismiss();
         setIsUploading(false);
+        setProcessingProgress(0);
         toast({
           title: "Upload Error",
           variant: "destructive",
@@ -197,7 +238,7 @@ const App: React.FC = () => {
               onChange={handleFileUpload}
             />
             <div className="flex cursor-pointer items-center justify-center rounded-full border border-gray-700 px-6 py-4 text-sm shadow-md">
-              {isUploading ? (
+              {!data.length && isUploading ? (
                 <div className="mr-2 flex items-center justify-center">
                   <div className="h-4 w-4 animate-spin rounded-full border-b-2 border-l-2 border-black" />
                 </div>
@@ -217,12 +258,20 @@ const App: React.FC = () => {
                   />
                 </svg>
               )}
-              {isUploading
+              {!data.length && isUploading
                 ? "Processing file..."
                 : "Upload a xlsx file or google excel sheet"}
             </div>
           </label>
           <ScrollArea className="h-[65vh] min-h-fit" onScroll={handleScroll}>
+            {!data.length && isUploading && (
+              <div className="mt-4">
+                <Progress value={processingProgress} className="h-2" />
+                <p className="mt-2 text-sm text-gray-600">
+                  Processing: {processingProgress}%
+                </p>
+              </div>
+            )}
             {data.length > 0 && (
               <div className="relative mt-5 w-[80vw] overflow-auto rounded-3xl border">
                 {isLoading && (
