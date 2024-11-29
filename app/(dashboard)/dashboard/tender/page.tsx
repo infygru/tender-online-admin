@@ -40,6 +40,10 @@ export default function Page({ searchParams }: paramsProps) {
   const [isDataDeleted, setIsDataDeleted] = useState(false);
 
   const handletodelete = async () => {
+    if (tender?.result.length === 0)
+      return toast({
+        title: "No Data to Delete",
+      });
     try {
       const response = await fetch("http://localhost:8080/api/tender/delete", {
         method: "DELETE",
