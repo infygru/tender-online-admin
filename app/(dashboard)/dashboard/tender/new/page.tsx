@@ -33,17 +33,26 @@ const App: React.FC = () => {
   const [processingProgress, setProcessingProgress] = useState(0);
 
   const router = useRouter();
-
-  // Memoize visible rows calculation
   const visibleRows = useMemo(() => {
     const start = currentPage * ROWS_PER_PAGE;
     return data.slice(start, start + ROWS_PER_PAGE);
   }, [data, currentPage]);
 
-  // Memoize headers
+  const totalPages = useMemo(() => {
+    return Math.ceil(data.length / ROWS_PER_PAGE);
+  }, [data]);
+
   const headers = useMemo(() => {
     return data.length > 0 ? Object.keys(data[0]) : [];
   }, [data]);
+
+  const handleNextPage = useCallback(() => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages - 1));
+  }, [totalPages]);
+
+  const handlePreviousPage = useCallback(() => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
+  }, []);
 
   const handleFileUpload = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,7 +103,7 @@ const App: React.FC = () => {
                   
                   // Simulate some processing time
                   const start = Date.now();
-                  while (Date.now() - start < 300) {} // Artificial delay
+                  while (Date.now() - start < 300) {}
                 });
                 
                 const parsedData = rawData.map(item => {
@@ -228,7 +237,7 @@ const App: React.FC = () => {
   return (
     <div className="container mx-auto my-4 overflow-hidden">
       <ScrollArea>
-        <div className="">
+        <div>
           <h1 className="mb-4 text-2xl font-bold">Upload Excel File</h1>
           <label className="block">
             <input
@@ -237,7 +246,7 @@ const App: React.FC = () => {
               className="hidden"
               onChange={handleFileUpload}
             />
-            <div className="flex cursor-pointer items-center justify-center rounded-full border border-gray-700 px-6 py-4 text-sm shadow-md">
+            <div className="flex cursor-pointer items-center justify-center rounded-full border border-gray-700 px-6 py-4 text-sm shadow-md transition-all hover:bg-black hover:text-white">
               {!data.length && isUploading ? (
                 <div className="mr-2 flex items-center justify-center">
                   <div className="h-4 w-4 animate-spin rounded-full border-b-2 border-l-2 border-black" />
@@ -263,9 +272,13 @@ const App: React.FC = () => {
                 : "Upload a xlsx file or google excel sheet"}
             </div>
           </label>
-          <ScrollArea className="h-[65vh] min-h-fit" onScroll={handleScroll}>
+
+          <ScrollArea
+            className="mt-4 h-[58vh] min-h-fit"
+            onScroll={handleScroll}
+          >
             {!data.length && isUploading && (
-              <div className="mt-4">
+              <div>
                 <Progress value={processingProgress} className="h-2" />
                 <p className="mt-2 text-sm text-gray-600">
                   Processing: {processingProgress}%
@@ -273,7 +286,7 @@ const App: React.FC = () => {
               </div>
             )}
             {data.length > 0 && (
-              <div className="relative mt-5 w-[80vw] overflow-auto rounded-3xl border">
+              <div className="relative w-[80vw] overflow-auto rounded-3xl border">
                 {isLoading && (
                   <div className="absolute left-0 right-0 top-[30vh] z-10 flex flex-col items-center justify-center bg-white/80">
                     <div className="w-1/2 px-4">
@@ -285,11 +298,12 @@ const App: React.FC = () => {
                   </div>
                 )}
                 <ScrollArea
-                  className="h-[60vh] min-h-fit"
+                  className={`h-[58vh] min-h-fit overflow-hidden`}
                   onScroll={handleScroll}
                   style={{
                     pointerEvents: isLoading ? "none" : "auto",
                     userSelect: isLoading ? "none" : "auto",
+                    opacity: isLoading ? 0.3 : 1,
                   }}
                 >
                   <Table className="w-max rounded-3xl border">
@@ -305,7 +319,7 @@ const App: React.FC = () => {
                         ))}
                       </TableRow>
                     </TableHeader>
-                    <TableBody className={isLoading ? "opacity-30" : ""}>
+                    <TableBody>
                       {visibleRows.map((row: ParsedData, rowIndex: number) => (
                         <TableRow key={rowIndex}>
                           {Object.values(row).map(
@@ -326,11 +340,48 @@ const App: React.FC = () => {
                   </Table>
                 </ScrollArea>
               </div>
-            )}
+            )}{" "}
           </ScrollArea>
+
+          {/* Pagination Controls */}
+          {data.length > ROWS_PER_PAGE && (
+            <div className="mt-4 flex items-center justify-between">
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => setCurrentPage(0)}
+                  disabled={currentPage === 0}
+                >
+                  First
+                </Button>
+                <Button
+                  onClick={handlePreviousPage}
+                  disabled={currentPage === 0}
+                >
+                  Previous
+                </Button>
+              </div>
+              <span className="text-sm">
+                Page {currentPage + 1} of {totalPages}
+              </span>
+              <div className="flex gap-2">
+                <Button
+                  onClick={handleNextPage}
+                  disabled={currentPage === totalPages - 1}
+                >
+                  Next
+                </Button>
+                <Button
+                  onClick={() => setCurrentPage(totalPages - 1)}
+                  disabled={currentPage === totalPages - 1}
+                >
+                  Last
+                </Button>
+              </div>
+            </div>
+          )}
           {data.length > 0 && (
             <Button
-              className="mt-4"
+              className="mt-2"
               onClick={handleSaveData}
               disabled={isLoading}
             >
