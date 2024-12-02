@@ -34,7 +34,9 @@ export default function Page({ searchParams }: paramsProps) {
     error,
     refetch,
   } = useQuery(["tender", { page, limit: pageLimit, country }], () =>
-    fetch("http://localhost:8080/api/tender/all").then((res) => res.json()),
+    fetch(process.env.NEXT_PUBLIC_API_ENPOINT + "/api/tender/all").then((res) =>
+      res.json(),
+    ),
   );
 
   const [isDataDeleted, setIsDataDeleted] = useState(false);
@@ -45,12 +47,15 @@ export default function Page({ searchParams }: paramsProps) {
         title: "No Data to Delete",
       });
     try {
-      const response = await fetch("http://localhost:8080/api/tender/delete", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_API_ENPOINT + "/api/tender/delete",
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
       if (response.ok) {
         refetch();
         setIsDataDeleted(true);

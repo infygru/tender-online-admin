@@ -174,7 +174,7 @@ const App: React.FC = () => {
   const handleSaveData = useCallback(async () => {
     setIsLoading(true);
     setUploadProgress(0);
-    const chunkSize = 100;
+    const chunkSize = 300;
     let allDataUploaded = true;
 
     for (let i = 0; i < data.length; i += chunkSize) {
@@ -182,7 +182,7 @@ const App: React.FC = () => {
 
       try {
         const response = await axios.post(
-          "http://localhost:8080/api/tender/upload/bulk",
+          process.env.NEXT_PUBLIC_API_ENPOINT + "/api/tender/upload/bulk",
           chunk,
         );
 
