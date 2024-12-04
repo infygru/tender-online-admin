@@ -13,6 +13,7 @@ interface Contact {
   createdAt: string;
   updatedAt: string;
   type: string;
+  remarks?: string;
 }
 
 interface UserListProps {
@@ -31,6 +32,7 @@ const UserList: React.FC<UserListProps> = ({
   activeTab,
 }) => {
   const [contacts, setContacts] = useState<Contact[]>([]);
+  const [remarks, setRemarks] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     if (data && data.contacts) {
@@ -61,13 +63,45 @@ const UserList: React.FC<UserListProps> = ({
       });
     }
   };
+  const handleSaveRemarks = async (id: string) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_ENPOINT}/api/tender/contactUpdateRemarks/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ remarks: remarks[id] }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to save remarks");
+      }
+
+      // Optionally refresh or update state here
+    } catch (error) {
+      console.error("Failed to save remarks:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (data && data.contacts) {
+      setContacts(data.contacts);
+      data.contacts.forEach((contact) => {
+        setRemarks((prevRemarks) => ({
+          ...prevRemarks,
+          [contact._id]: contact.remarks || "", // Initialize remarks state
+        }));
+      });
+    }
+  }, [data]);
 
   const handleMarkAsContacted = async (id: string) => {
     try {
-      // Find the contact that is being marked as contacted
       const contactToUpdate = contacts.find((contact) => contact._id === id);
 
-      // Optimistically update the contact's type in local state
       setContacts((prevContacts) =>
         prevContacts
           .map((contact) =>
@@ -89,7 +123,6 @@ const UserList: React.FC<UserListProps> = ({
       }
     } catch (error) {
       console.error("Failed to mark contact as contacted:", error);
-      // Revert to original contacts if API call fails
       setContacts(data.contacts);
     }
   };
@@ -115,7 +148,6 @@ const UserList: React.FC<UserListProps> = ({
           Contacted Entries
         </button>
       </div>
-
       {activeTab === "support" && (
         <>
           {contacts.length === 0 ? (
@@ -129,6 +161,7 @@ const UserList: React.FC<UserListProps> = ({
                   <th className="border px-6 py-4 text-left">Email</th>
                   <th className="border px-6 py-4 text-left">Message</th>
                   <th className="border px-6 py-4 text-center">Actions</th>
+                  <th className="border px-6 py-4 text-center">Remarks</th>{" "}
                 </tr>
               </thead>
               <tbody className="text-sm font-light text-gray-600">
@@ -160,6 +193,21 @@ const UserList: React.FC<UserListProps> = ({
                         Mark as Contacted
                       </Button>
                     </td>
+                    <td className="border px-6 py-4 text-center">
+                      <input
+                        type="text"
+                        value={remarks[contact._id] || ""}
+                        onChange={(e) =>
+                          setRemarks({
+                            ...remarks,
+                            [contact._id]: e.target.value,
+                          })
+                        }
+                        placeholder="Add remarks"
+                        className="rounded border p-1"
+                        onBlur={() => handleSaveRemarks(contact._id)} // Save on blur
+                      />
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -181,6 +229,7 @@ const UserList: React.FC<UserListProps> = ({
                   <th className="border px-6 py-4 text-left">Email</th>
                   <th className="border px-6 py-4 text-left">Message</th>
                   <th className="border px-6 py-4 text-center">Actions</th>
+                  <th className="border px-6 py-4 text-center">Remarks</th>
                 </tr>
               </thead>
               <tbody className="text-sm font-light text-gray-600">
@@ -200,6 +249,21 @@ const UserList: React.FC<UserListProps> = ({
                       >
                         Delete
                       </Button>
+                    </td>
+                    <td className="flex gap-2 border px-6 py-4 text-center">
+                      <input
+                        type="text"
+                        value={remarks[contact._id] || ""}
+                        onChange={(e) =>
+                          setRemarks({
+                            ...remarks,
+                            [contact._id]: e.target.value,
+                          })
+                        }
+                        placeholder="Add remarks"
+                        className="rounded border p-1"
+                        onBlur={() => handleSaveRemarks(contact._id)} // Save on blur
+                      />
                     </td>
                   </tr>
                 ))}
