@@ -6,11 +6,6 @@ import { buttonVariants } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { toast } from "@/components/ui/use-toast";
-import { Employee } from "@/constants/data";
-import { cn } from "@/lib/utils";
-import { Plus } from "lucide-react";
-import Link from "next/link";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
 const breadcrumbItems = [
@@ -45,7 +40,7 @@ export default function Page({ searchParams }: paramsProps) {
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error fetching data</div>;
-  const totalUsers = tender?.mappings?.length;
+  const totalUsers = tender?.mappings?.length ?? 0;
 
   return (
     <>
@@ -149,7 +144,7 @@ const columns: ColumnDef<any>[] = [
   // },
   {
     accessorKey: "note",
-    header: "Notes",
+    header: "Remarks",
     cell: ({ row }) => {
       const [isEditing, setIsEditing] = React.useState(false);
       const [noteText, setNoteText] = React.useState(row.original.note || "");
@@ -205,7 +200,7 @@ const columns: ColumnDef<any>[] = [
       return (
         <div className="flex justify-between space-x-2">
           <span className="font-xs w-[100px] text-balance">
-            {noteText || "Add a note"}
+            {noteText || "Add a remark"}
           </span>
           <Button variant="ghost" size="sm" onClick={() => setIsEditing(true)}>
             Edit
