@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, useRef } from "react";
 import * as XLSX from "xlsx";
 import axios from "axios";
 import {
@@ -26,6 +26,7 @@ const ROWS_PER_PAGE = 50; // Show only 50 rows at a time
 const App: React.FC = () => {
   const [data, setData] = useState<ParsedData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const scrollAreaRef = useRef<any>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadMessage, setUploadMessage] = useState("");
   const [isUploading, setIsUploading] = useState(false);
@@ -172,9 +173,13 @@ const App: React.FC = () => {
   );
 
   const handleSaveData = useCallback(async () => {
+    if (scrollAreaRef.current) {
+      console.log("inside");
+      scrollAreaRef.current.scrollTop = 0;
+    }
     setIsLoading(true);
     setUploadProgress(0);
-    const chunkSize = 300;
+    const chunkSize = 1000;
     let allDataUploaded = true;
 
     for (let i = 0; i < data.length; i += chunkSize) {
@@ -235,7 +240,7 @@ const App: React.FC = () => {
   );
 
   return (
-    <div className="container mx-auto my-4 overflow-hidden">
+    <div className="container mx-auto my-4">
       <ScrollArea>
         <div>
           <h1 className="mb-4 text-2xl font-bold">Upload Excel File</h1>
@@ -286,7 +291,10 @@ const App: React.FC = () => {
               </div>
             )}
             {data.length > 0 && (
-              <div className="relative w-[80vw] overflow-auto rounded-3xl border">
+              <div
+                className="relative w-[80vw] overflow-auto rounded-3xl border"
+                ref={scrollAreaRef}
+              >
                 {isLoading && (
                   <div className="absolute left-0 right-0 top-[30vh] z-10 flex flex-col items-center justify-center bg-white/80">
                     <div className="w-1/2 px-4">
@@ -297,48 +305,53 @@ const App: React.FC = () => {
                     </p>
                   </div>
                 )}
-                <ScrollArea
-                  className={`h-[58vh] min-h-fit overflow-hidden`}
+                {/* <ScrollArea
+                  className={`h-[58vh] min-h-fit overflow-auto`}
                   onScroll={handleScroll}
                   style={{
                     pointerEvents: isLoading ? "none" : "auto",
                     userSelect: isLoading ? "none" : "auto",
                     opacity: isLoading ? 0.3 : 1,
                   }}
+                > */}
+                <Table
+                  className="w-max rounded-3xl border"
+                  style={{
+                    opacity: isLoading ? 0.3 : 1,
+                  }}
                 >
-                  <Table className="w-max rounded-3xl border">
-                    <TableCaption>
-                      Showing {visibleRows.length} of {data.length} rows
-                    </TableCaption>
-                    <TableHeader>
-                      <TableRow>
-                        {headers.map((key) => (
-                          <TableHead key={key} className="border px-4 py-2">
-                            {key}
-                          </TableHead>
-                        ))}
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {visibleRows.map((row: ParsedData, rowIndex: number) => (
-                        <TableRow key={rowIndex}>
-                          {Object.values(row).map(
-                            (value: any, cellIndex: number) => (
-                              <TableCell
-                                key={cellIndex}
-                                className="border px-6 py-3"
-                              >
-                                {value instanceof Date
-                                  ? value.toISOString()
-                                  : value?.toString()}
-                              </TableCell>
-                            ),
-                          )}
-                        </TableRow>
+                  <TableCaption>
+                    Showing {visibleRows.length} of {data.length} rows
+                  </TableCaption>
+                  <TableHeader>
+                    <TableRow>
+                      {headers.map((key) => (
+                        <TableHead key={key} className="border px-4 py-2">
+                          {key}
+                        </TableHead>
                       ))}
-                    </TableBody>
-                  </Table>
-                </ScrollArea>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {visibleRows.map((row: ParsedData, rowIndex: number) => (
+                      <TableRow key={rowIndex}>
+                        {Object.values(row).map(
+                          (value: any, cellIndex: number) => (
+                            <TableCell
+                              key={cellIndex}
+                              className="border px-6 py-3"
+                            >
+                              {value instanceof Date
+                                ? value.toISOString()
+                                : value?.toString()}
+                            </TableCell>
+                          ),
+                        )}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                {/* </ScrollArea> */}
               </div>
             )}{" "}
           </ScrollArea>
