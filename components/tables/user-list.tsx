@@ -174,7 +174,7 @@ const UserList: React.FC<UserListProps> = ({
                     <td className="border px-6 py-4">
                       {contact.subject ? contact.subject : "No subject"}
                     </td>
-                    <td className="border px-6 py-4">{contact.email}</td>
+                    <td className="border px-6">{contact.email}</td>
                     <td className="border px-6 py-4">{contact.message}</td>
                     <td className="flex gap-2 border px-6 py-4 text-center">
                       <Link href={`mailto:${contact.email}`} className="w-fit">
