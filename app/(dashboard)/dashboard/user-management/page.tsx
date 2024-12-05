@@ -173,7 +173,7 @@ export default function Page({ searchParams }: ParamsProps) {
       <ScrollArea className="h-[80vh]">
         <div className="flex items-start justify-between space-x-4">
           <Heading
-            title={`All User  (${data?.total || 0})`}
+            title={`All User  (${data?.length || 0})`}
             description="Manage all users, view their details and update statuses."
           />
           <Link href="/dashboard/user-management/create">
