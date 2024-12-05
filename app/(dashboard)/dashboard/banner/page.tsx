@@ -97,6 +97,9 @@ export default function Page({ searchParams }: paramsProps) {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error fetching data</div>;
 
+  // Check if there are no banners
+  const hasBanners = tender && tender.banner && tender.banner.banner;
+
   return (
     <>
       <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
@@ -113,69 +116,75 @@ export default function Page({ searchParams }: paramsProps) {
 
           <div className="mt-4">
             <div className="space-y-4 rounded-3xl border px-8 py-3">
-              {/* Banner Input */}
-              <div>
-                <label
-                  htmlFor="bannerText"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Banner Text
-                </label>
-                <Input
-                  id="bannerText"
-                  value={banner}
-                  onChange={(e) => setBanner(e.target.value)}
-                  placeholder="Enter banner text"
-                  className="mt-1 block w-full border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
+              {/* Check if there are no banners */}
+              {!hasBanners ? (
+                <div className="text-center text-gray-500">
+                  No banners available.
+                </div>
+              ) : (
+                <>
+                  {/* Banner Input */}
+                  <div>
+                    <label
+                      htmlFor="bannerText"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Banner Text
+                    </label>
+                    <Input
+                      id="bannerText"
+                      value={banner}
+                      onChange={(e) => setBanner(e.target.value)}
+                      placeholder="Enter banner text"
+                      className="mt-1 block w-full border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    />
+                  </div>
 
-              {/* isActive Switch */}
-              <div className="flex items-center space-x-2">
-                <Switch
-                  checked={isActive}
-                  onCheckedChange={setIsActive}
-                  id="isActive"
-                  className="border-gray-300"
-                />
-                <label
-                  htmlFor="isActive"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Is Active Banner Enabled
-                </label>
-              </div>
+                  {/* isActive Switch */}
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      checked={isActive}
+                      onCheckedChange={setIsActive}
+                      id="isActive"
+                      className="border-gray-300"
+                    />
+                    <label
+                      htmlFor="isActive"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      Is Active Banner Enabled
+                    </label>
+                  </div>
 
-              {/* isSignup Button */}
-              {/* <div className="flex items-center space-x-2">
-                <Button onClick={() => setIsSignup(!isSignup)}>
-                  {isSignup ? "Signup Enabled" : "Signup Disabled"}
-                </Button>
-              </div> */}
-              <div className="flex items-center space-x-2">
-                <Switch
-                  checked={isSignup}
-                  onCheckedChange={setIsSignup}
-                  id="isActive"
-                  className="border-gray-300"
-                />
-                <label
-                  htmlFor="isActive"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Is Signup Button Enabled
-                </label>
-              </div>
+                  {/* isSignup Button */}
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      checked={isSignup}
+                      onCheckedChange={setIsSignup}
+                      id="isSignup"
+                      className="border-gray-300"
+                    />
+                    <label
+                      htmlFor="isSignup"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      Is Signup Button Enabled
+                    </label>
+                  </div>
 
-              {/* Update Button */}
-              <div className="flex items-center justify-center">
-                <Button
-                  onClick={handleUpdate}
-                  disabled={updateMutation.isLoading}
-                >
-                  {updateMutation.isLoading ? "Updating..." : "Update Banner"}
-                </Button>
-              </div>
+                  {/* Update Button */}
+                  <div className="flex items-center justify-center">
+                    <Button
+                      onClick={handleUpdate}
+                      disabled={updateMutation.isLoading}
+                    >
+                      {updateMutation.isLoading
+                        ? "Updating..."
+                        : "Update Banner"}
+                    </Button>
+                  </div>
+                </>
+              )}
             </div>
 
             <div className="mt-6 space-y-4 rounded-3xl border px-8 py-3">
@@ -237,26 +246,46 @@ const ImageUpload: React.FC = () => {
     formData.append("url", url);
 
     try {
-      const response = await axios.put(
-        process.env.NEXT_PUBLIC_API_ENPOINT +
-          "/api/ads/banner/upload/" +
-          data[0]._id,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
+      if (data && data.length > 0) {
+        // If there is an existing banner, update it
+        const response = await axios.put(
+          process.env.NEXT_PUBLIC_API_ENPOINT +
+            "/api/ads/banner/upload/" +
+            data[0]._id, // Use the ID of the existing banner
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           },
-        },
-      );
+        );
 
-      if (response.status === 200) {
-        toast({
-          title: "Upload Successful",
-          variant: "default",
-          description: "Image uploaded successfully.",
-        });
+        if (response.status === 200) {
+          toast({
+            title: "Upload Successful",
+            variant: "default",
+            description: "Image updated successfully.",
+          });
+        }
       } else {
-        throw new Error(`Unexpected response status: ${response.status}`);
+        // If no existing banner, create a new one
+        const response = await axios.post(
+          process.env.NEXT_PUBLIC_API_ENPOINT + "/api/ads/banner/upload",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          },
+        );
+
+        if (response.status === 201) {
+          toast({
+            title: "Upload Successful",
+            variant: "default",
+            description: "Image uploaded successfully.",
+          });
+        }
       }
     } catch (error: any) {
       console.error("Error uploading image:", error);
@@ -272,7 +301,7 @@ const ImageUpload: React.FC = () => {
     }
   };
   useEffect(() => {
-    if (data) {
+    if (data && data.length > 0) {
       setSelectedFile(data[0].imageUrl);
       setUrl(data[0].url);
     }
