@@ -22,6 +22,8 @@ interface ParsedData {
 }
 
 const ROWS_PER_PAGE = 50; // Show only 50 rows at a time
+const CHUNK_SIZE = 1000;
+const CONCURRENT_UPLOADS = 5;
 
 const App: React.FC = () => {
   const [data, setData] = useState<ParsedData[]>([]);
@@ -179,26 +181,61 @@ const App: React.FC = () => {
     }
     setIsLoading(true);
     setUploadProgress(0);
-    const chunkSize = 1000;
+    const chunkSize = 100;
     let allDataUploaded = true;
 
     for (let i = 0; i < data.length; i += chunkSize) {
       const chunk = data.slice(i, i + chunkSize);
 
       try {
-        const response = await axios.post(
-          process.env.NEXT_PUBLIC_API_ENPOINT + "/api/tender/upload/bulk",
-          chunk,
-        );
+        const uploadChunks = async (chunks: ParsedData[][]) => {
+          const results = await Promise.allSettled(
+            chunks.map((chunk) =>
+              axios.post(
+                process.env.NEXT_PUBLIC_API_ENPOINT + "/api/tender/upload/bulk",
+                chunk,
+              ),
+            ),
+          );
 
-        const percentage = Math.round(((i + chunk.length) / data.length) * 100);
-        setUploadProgress(percentage);
-        setUploadMessage(`Uploading... ${percentage}%`);
+          const failedChunks = results.reduce((failed, result, index) => {
+            if (result.status === "rejected") {
+              failed.push(chunks[index]);
+            }
+            return failed;
+          }, [] as ParsedData[][]);
 
-        if (response.status !== 201) {
-          allDataUploaded = false;
-          throw new Error(`Unexpected response status: ${response.status}`);
+          return failedChunks;
+        };
+
+        const chunks: ParsedData[][] = [];
+        for (let i = 0; i < data.length; i += CHUNK_SIZE) {
+          chunks.push(data.slice(i, i + CHUNK_SIZE));
         }
+
+        let failedChunks: ParsedData[][] = [];
+        for (let i = 0; i < chunks.length; i += CONCURRENT_UPLOADS) {
+          const currentBatch = chunks.slice(i, i + CONCURRENT_UPLOADS);
+          const batchFailures = await uploadChunks(currentBatch);
+          failedChunks = [...failedChunks, ...batchFailures];
+
+          const percentage = Math.round(
+            ((i + currentBatch.length) / chunks.length) * 100,
+          );
+          setUploadProgress(percentage);
+          setUploadMessage(`Uploading... ${percentage}%`);
+        }
+
+        if (failedChunks.length > 0) {
+          throw new Error(`Failed to upload ${failedChunks.length} chunks`);
+        }
+
+        toast({
+          title: "Data Saved",
+          variant: "default",
+          description: "All data saved successfully.",
+        });
+        router.push("/dashboard/tender");
       } catch (error) {
         console.error("Error saving data:", error);
         allDataUploaded = false;
