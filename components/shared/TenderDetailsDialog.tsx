@@ -60,7 +60,7 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
 
       if (response.ok) {
         toast.success(
-          "Tender documents request sended successfully. we will reach out soon to you."
+          "Tender documents request sended successfully. we will reach out soon to you.",
         );
         setSelectedRowData(null);
       } else {
@@ -77,10 +77,10 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
       open={!!selectedRowData}
       onOpenChange={() => setSelectedRowData(null)}
     >
-      <DialogContent className="max-w-3xl !rounded-3xl text-white bg-white">
-        <div className="lg:px-4 px-0 py-2 ">
-          <div className="bg-[#000000] rounded-3xl px-2 lg:px-4 py-4">
-            <div className="flex lg:flex-row flex-wrap items-center justify-between w-full">
+      <DialogContent className="max-w-3xl !rounded-3xl bg-white text-white">
+        <div className="px-0 py-2 lg:px-4 ">
+          <div className="rounded-3xl bg-[#000000] px-2 py-4 lg:px-4">
+            <div className="flex w-full flex-wrap items-center justify-between lg:flex-row">
               <div className="flex  items-center gap-2">
                 <div className="">
                   <svg
@@ -105,10 +105,10 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
                   </svg>
                 </div>
                 <div className="">
-                  <p className="lg:text-sm text-[10px] font-normal">
+                  <p className="text-[10px] font-normal lg:text-sm">
                     Reference No.
                   </p>
-                  <h2 className="lg:text-sm text-[10px]">
+                  <h2 className="text-[10px] lg:text-sm">
                     {selectedRowData?.refNo}
                   </h2>
                 </div>
@@ -137,27 +137,27 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
                   </svg>
                 </div>
                 <div className="">
-                  <p className="lg:text-sm text-[10px] font-normal">
+                  <p className="text-[10px] font-normal lg:text-sm">
                     Tender ID.
                   </p>
-                  <h2 className="lg:text-sm text-[10px]">
+                  <h2 className="text-[10px] lg:text-sm">
                     {selectedRowData?.TenderId}
                   </h2>
                 </div>
               </div>
             </div>
             <div className="">
-              <h3 className="py-6 text-center font-medium text-xs lg:text-lg">
+              <h3 className="py-6 text-center text-xs font-medium lg:text-lg">
                 {selectedRowData?.tenderName}
               </h3>
-              <p className="text-sm text-center flex items-center justify-center">
+              <p className="flex items-center justify-center text-center text-sm">
                 <Collapsible
                   open={desOpen}
                   onOpenChange={setDesOpen}
                   className="flex flex-col items-center justify-center"
                 >
-                  <CollapsibleTrigger className="duration-300 text-black m-auto w-fit">
-                    <div className="bg-white flex items-center gap-0 pl-2 rounded-lg">
+                  <CollapsibleTrigger className="m-auto w-fit text-black duration-300">
+                    <div className="flex items-center gap-0 rounded-lg bg-white pl-2">
                       <span>Description</span>
                       <Button variant="ghost" size="sm" className="w-9 p-0">
                         <ChevronUp
@@ -170,9 +170,9 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
                   </CollapsibleTrigger>
                   <CollapsibleContent className="data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up overflow-hidden">
                     <div
-                      className={`pt-2 pb-3 transition-all duration-300 ease-in-out
+                      className={`pb-3 pt-2 transition-all duration-300 ease-in-out
           ${
-            desOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"
+            desOpen ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0"
           }`}
                     >
                       {selectedRowData?.WorkDescription}
@@ -181,7 +181,7 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
                 </Collapsible>
               </p>
             </div>
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <div className="space-y-3 py-2">
                 <div className="flex items-center gap-4">
                   <svg
@@ -353,7 +353,7 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
                     />
                   </svg>
 
-                  <h4 className="lg:text-sm text-[10px]">
+                  <h4 className="text-[10px] lg:text-sm">
                     {selectedRowData?.department}
                   </h4>
                 </div>
@@ -373,12 +373,12 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
                     />
                   </svg>
 
-                  <h4 className="lg:text-sm text-[10px]">
+                  <h4 className="text-[10px] lg:text-sm">
                     Sub Department <span>{selectedRowData?.subDepartment}</span>
                   </h4>
                 </div>
               </div>
-              <div className="flex gap-1 items-center">
+              <div className="flex items-center gap-1">
                 <div className="flex items-center">
                   <Image
                     src={"/globe.svg"}
@@ -388,14 +388,14 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
                   />
                   <h3 className="">Source:</h3>
                 </div>
-                <h4 className="lg:text-sm text-[10px] ">
+                <h4 className="text-[10px] lg:text-sm ">
                   {selectedRowData?.source}
                 </h4>
               </div>
             </div>
           </div>
           <div className="flex justify-between">
-            <div className="flex text-black justify-center items-center gap-2 py-4 border-b">
+            <div className="flex items-center justify-center gap-2 border-b py-4 text-black">
               <svg
                 width="20"
                 height="20"
@@ -408,75 +408,67 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
                   fill="black"
                 />
               </svg>
-              <p className="lg:text-sm text-[10px]">
+              <p className="text-[10px] lg:text-sm">
                 {selectedRowData?.address}
               </p>
             </div>
-            <div className="flex text-black justify-center items-center gap-2 py-4 border-b">
+            <div className="flex items-center justify-center gap-2 border-b py-4 text-black">
               <Image
                 src="/district.png"
                 width={28}
                 height={26}
                 alt="District"
               />
-              <p className="lg:text-sm text-[10px]">
+              <p className="text-[10px] lg:text-sm">
                 {selectedRowData?.district}
               </p>
             </div>
           </div>
-          <div className="flex text-black items-center justify-center py-2 w-full">
-            <div className="lg:px-4 px-1 border-r w-full text-center py-1 lg:py-3 space-y-2">
-              <p className="lg:text-xs text-[8px] font-medium">
+          <div className="flex w-full items-center justify-center py-2 text-black">
+            <div className="w-full space-y-2 border-r px-1 py-1 text-center lg:px-4 lg:py-3">
+              <p className="text-[8px] font-medium lg:text-xs">
                 Published Date{" "}
               </p>
-              <h1 className="font-semibold lg:text-sm text-[10px]">
+              <h1 className="text-[10px] font-semibold lg:text-sm">
                 {formatDate(selectedRowData?.epublishedDate)}
               </h1>
             </div>
-            <div className="lg:px-4 px-1 border-r text-center w-full py-1 lg:py-3 space-y-2">
-              <p className="lg:text-xs text-[8px] font-medium">
+            <div className="w-full space-y-2 border-r px-1 py-1 text-center lg:px-4 lg:py-3">
+              <p className="text-[8px] font-medium lg:text-xs">
                 Bid Submission Date :{" "}
               </p>
-              <h1 className="font-semibold lg:text-sm text-[10px]">
+              <h1 className="text-[10px] font-semibold lg:text-sm">
                 {formatDate(selectedRowData?.bidSubmissionDate)}
               </h1>
             </div>
-            <div className="lg:px-4 px-1 text-center w-full py-1 lg:py-3 space-y-2">
-              <p className="lg:text-xs text-[8px] font-medium">
+            <div className="w-full space-y-2 px-1 py-1 text-center lg:px-4 lg:py-3">
+              <p className="text-[8px] font-medium lg:text-xs">
                 Bid Opening Date :
               </p>
-              <h1 className="font-semibold lg:text-sm text-[10px]">
+              <h1 className="text-[10px] font-semibold lg:text-sm">
                 {formatDate(selectedRowData?.bidOpeningDate)}
               </h1>
             </div>
           </div>
-          <div className="bg-[#EDEDED]  border-[#EDEDED] border flex items-center gap-4 justify-between px-1 lg:px-24 py-3 rounded-3xl w-full">
-            <div className="flex text-black items-center justify-center py-2 w-full">
-              <div className="lg:px-4 px-1 border-r border-gray-400 w-full text-center py-1 lg:py-3 space-y-2">
-                <h1 className="text-[#4B4B4B] font-semibold text-xs lg:text-xl">
+          <div className="flex  w-full items-center justify-between gap-4 rounded-3xl border border-[#EDEDED] bg-[#EDEDED] px-1 py-3 lg:px-24">
+            <div className="flex w-full items-center justify-center py-2 text-black">
+              <div className="w-full space-y-2 border-r border-gray-400 px-1 py-1 text-center lg:px-4 lg:py-3">
+                <h1 className="text-xs font-semibold text-[#4B4B4B] lg:text-xl">
                   EMD Amount
                 </h1>
-                <h3 className="text-[#2E2E2E] font-medium text-xs lg:text-base">
+                <h3 className="text-xs font-medium text-[#2E2E2E] lg:text-base">
                   {formatIndianRupeePrice(selectedRowData?.EMDAmountin)}
                 </h3>
               </div>
-              <div className="lg:px-4 px-1 w-full text-center py-1 lg:py-3 space-y-2">
-                <h1 className="text-[#4B4B4B] font-semibold text-xs lg:text-xl">
+              <div className="w-full space-y-2 px-1 py-1 text-center lg:px-4 lg:py-3">
+                <h1 className="text-xs font-semibold text-[#4B4B4B] lg:text-xl">
                   Tender Value
                 </h1>
-                <h3 className="text-[#2E2E2E] font-medium text-xs lg:text-base">
+                <h3 className="text-xs font-medium text-[#2E2E2E] lg:text-base">
                   {formatIndianRupeePrice(selectedRowData?.tenderValue)}
                 </h3>
               </div>
             </div>
-          </div>
-          <div className="flex justify-center pt-6 items-center w-full">
-            <button
-              onClick={() => handleToSendTender(selectedRowData._id)}
-              className="bg-[#1C1A1A] px-4 py-2.5 rounded-md text-white text-xs"
-            >
-              Request For Documents
-            </button>
           </div>
         </div>
       </DialogContent>
