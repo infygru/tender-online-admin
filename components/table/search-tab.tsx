@@ -36,14 +36,14 @@ const SearchTab: FC<SearchTabProps> = ({
             headers: {
               Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
             },
-          },
+          }
         );
 
         const data = response.data;
         console.log(data);
       } else {
         toast.info(
-          "Duplicate tags are not allowed please enter a different tag",
+          "Duplicate tags are not allowed please enter a different tag"
         );
       }
 
@@ -61,7 +61,7 @@ const SearchTab: FC<SearchTabProps> = ({
   };
 
   return (
-    <div className="w-full px-2 py-2">
+    <div className="w-full px-2 py-0">
       <Input
         placeholder="Search tenders..."
         value={search}
@@ -69,24 +69,26 @@ const SearchTab: FC<SearchTabProps> = ({
         onKeyDown={handleKeyDown}
         className="max-w-xl"
       />
-      <div className="mt-4 flex flex-wrap gap-2">
-        {searchList.map((tag, index) => (
-          <div
-            onClick={() => handleRemoveTag(index)}
-            key={index}
-            className="flex cursor-pointer items-center space-x-1 rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-800"
-          >
-            <span>{tag}</span>
-            <button
+      {searchList.length > 0 && (
+        <div className="flex flex-wrap mt-4 gap-2">
+          {searchList.map((tag, index) => (
+            <div
               onClick={() => handleRemoveTag(index)}
-              className="ml-2 text-blue-500 hover:text-blue-700"
-              aria-label={`Remove ${tag}`}
+              key={index}
+              className="bg-gray-100 text-xs text-gray-800 px-2 py-1 rounded-full flex items-center space-x-1 cursor-pointer"
             >
-              &times;
-            </button>
-          </div>
-        ))}
-      </div>
+              <span>{tag}</span>
+              <button
+                onClick={() => handleRemoveTag(index)}
+                className="ml-2 text-blue-500 hover:text-blue-700"
+                aria-label={`Remove ${tag}`}
+              >
+                &times;
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

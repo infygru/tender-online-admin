@@ -13,6 +13,7 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useQuery } from "react-query";
 import { useState } from "react";
+import { DataTableTender } from "@/components/table/tender-table";
 
 const breadcrumbItems = [{ title: "Tender", link: "/dashboard/tender" }];
 
@@ -27,25 +28,12 @@ export default function Page({ searchParams }: paramsProps) {
   const pageLimit = Number(searchParams.limit) || 10;
   const country = searchParams.search || null;
   const offset = (page - 1) * pageLimit;
-
-  const {
-    data: tender,
-    isLoading,
-    error,
-    refetch,
-  } = useQuery(["tender", { page, limit: pageLimit, country }], () =>
-    fetch(process.env.NEXT_PUBLIC_API_ENPOINT + "/api/tender/all").then((res) =>
-      res.json(),
-    ),
-  );
+  const [search, setSearch] = useState("");
+  const [tenderLength, setTenderLength] = useState<null | 0>(0);
 
   const [isDataDeleted, setIsDataDeleted] = useState(false);
 
   const handletodelete = async () => {
-    if (tender?.result.length === 0)
-      return toast({
-        title: "No Data to Delete",
-      });
     try {
       const response = await fetch(
         process.env.NEXT_PUBLIC_API_ENPOINT + "/api/tender/delete",
@@ -57,8 +45,8 @@ export default function Page({ searchParams }: paramsProps) {
         },
       );
       if (response.ok) {
-        refetch();
         setIsDataDeleted(true);
+        setTenderLength(0);
         toast({
           title: "Data Deleted",
           description: "All data has been deleted",
@@ -69,18 +57,13 @@ export default function Page({ searchParams }: paramsProps) {
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error fetching data</div>;
-
-  const totalUsers = tender?.result?.length || 0;
-
   return (
     <>
       <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
         <BreadCrumb items={breadcrumbItems} />
 
         <div className="flex items-start justify-between">
-          <Heading title={`Total Tender (${totalUsers})`} description="" />
+          <Heading title={`Total Tender (${tenderLength})`} description="" />
 
           <Link
             href={"/dashboard/tender/new"}
@@ -98,15 +81,12 @@ export default function Page({ searchParams }: paramsProps) {
         </div>
         <Separator />
 
-        {!isDataDeleted && totalUsers > 0 ? (
+        {!isDataDeleted ? (
           <ScrollArea className="h-[68vh]">
-            <EmployeeTable
-              searchKey="country"
-              pageNo={page}
-              columns={columns}
-              totalUsers={totalUsers}
-              data={tender?.result}
-              pageCount={totalUsers / pageLimit}
+            <DataTableTender
+              setSearch={setSearch}
+              search={search}
+              setTenderLength={setTenderLength}
             />
           </ScrollArea>
         ) : (

@@ -23,7 +23,7 @@ interface ParsedData {
 
 const ROWS_PER_PAGE = 50; // Show only 50 rows at a time
 const CHUNK_SIZE = 1000;
-const CONCURRENT_UPLOADS = 5;
+const CONCURRENT_UPLOADS = 10;
 
 const App: React.FC = () => {
   const [data, setData] = useState<ParsedData[]>([]);

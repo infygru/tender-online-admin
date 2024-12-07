@@ -1,6 +1,7 @@
 "use client";
 import "@uploadthing/react/styles.css";
 import { Inter } from "next/font/google";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./globals.css";
 import ThemeProvider from "@/components/layout/ThemeToggle/theme-provider";
 import { useRouter } from "next/navigation";
@@ -28,6 +29,7 @@ export default function RootLayout({
       navigate.push("/"); // Redirect to login if not authenticated
     }
   }, [navigate]);
+  const queryClient = new QueryClient();
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -51,9 +53,11 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} overflow-hidden`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          <Toaster />
-
-          {children}
+          {" "}
+          <QueryClientProvider client={queryClient}>
+            <Toaster />
+            {children}{" "}
+          </QueryClientProvider>
         </ThemeProvider>
       </body>
     </html>
