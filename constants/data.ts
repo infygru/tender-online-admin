@@ -143,6 +143,12 @@ export const navItems: NavItem[] = [
     label: "blog",
   },
   {
+    title: "Keyword Research",
+    href: "/dashboard/keyword-suggestions",
+    icon: "user",
+    label: "keywordManagement",
+  },
+  {
     title: "User Management",
     href: "/dashboard/user-management",
     icon: "user",
