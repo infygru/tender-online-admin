@@ -319,14 +319,53 @@ export function DataTableTender({ setSearch, search }: any) {
   const [endDate, setEndDate] = React.useState<any | null>(null);
 
   const [dateRange, setDateRange] = React.useState<DateRange | null>(null);
+  const [page, setPage] = React.useState(0);
+  const [inputPage, setInputPage] = React.useState(1);
   const [tenders, setTenders] = React.useState<any | null>(null);
+  const [loading, setLoading] = React.useState(true);
+
   const fetchTenders = async () => {
-    const response = await axios.get(
-      process.env.NEXT_PUBLIC_API_ENPOINT + "/api/tender/all",
-    );
-    setTenders(response.data);
-    return response.data;
+    try {
+      setLoading(true);
+      const limit = 10;
+      const offset = (page * 10).toString();
+      const response = await axios.get(
+        process.env.NEXT_PUBLIC_API_ENPOINT +
+          "/api/tender/all" +
+          `?limit=${limit}` +
+          `&offset=${offset}`,
+      );
+      setTenders(response.data);
+      setLoading(false);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching tenders:", error);
+      setLoading(false);
+    }
   };
+
+  const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Only allow numeric input
+    setInputPage(value === "" ? 1 : Math.max(1, parseInt(value)));
+  };
+
+  const handleGoToPage = () => {
+    // Adjust for zero-based indexing and ensure within bounds
+    const targetPage = Math.min(
+      Math.max(0, inputPage - 1),
+      Math.ceil((tenders?.count || 0) / 10) - 1,
+    );
+    setPage(targetPage);
+  };
+
+  React.useEffect(() => {
+    setInputPage(page + 1);
+  }, [page]);
+
+  React.useEffect(() => {
+    fetchTenders();
+  }, [page]);
   const [selectedRow, setSelectedRow] = React.useState<any>([]);
   console.log(selectedRow, "selectedRow");
 
@@ -341,7 +380,7 @@ export function DataTableTender({ setSearch, search }: any) {
 
   React.useEffect(() => {
     fetchTenders();
-  }, []);
+  }, [page]);
 
   const [user, setUser] = React.useState<any | null>(null);
 
@@ -493,27 +532,69 @@ export function DataTableTender({ setSearch, search }: any) {
           setSelectedRowData={setSelectedRowData}
         />
       </div>
-      <div className="flex items-center justify-end space-x-2 px-4 py-4">
+      <div className="flex items-center justify-between px-4 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getRowModel().rows.length} row(s) selected.
+          {tenders?.count || 0} total
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
+        <div className="flex items-center space-x-8">
+          <div className="flex items-center gap-2">
+            <div className="flex items-center space-x-2">
+              <span className="text-sm">Page</span>
+              <input
+                type="number"
+                value={inputPage}
+                onChange={handlePageInputChange}
+                min="1"
+                max={Math.ceil((tenders?.count || 0) / 10)}
+                className="w-16 rounded border px-2 py-1 text-sm"
+              />
+              <Button variant="default" size="sm" onClick={handleGoToPage}>
+                Go
+              </Button>
+            </div>
+
+            <div className="text-sm">
+              of {Math.ceil((tenders?.count || 0) / 10)}
+            </div>
+          </div>
+          <div className="space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage(0)}
+              disabled={page === 0}
+              className="text-black/35 hover:text-black/100"
+            >
+              First
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage(Math.ceil((tenders?.count || 0) / 10) - 1)}
+              disabled={page >= Math.ceil((tenders?.count || 0) / 10) - 1}
+              className="text-black/35 hover:text-black/100"
+            >
+              Last
+            </Button>
+            <Button
+              variant="default"
+              size="sm"
+              onClick={() => setPage((p) => p - 1)}
+              disabled={page === 0}
+            >
+              Previous
+            </Button>
+            <Button
+              variant="default"
+              size="sm"
+              onClick={() => setPage((p) => p + 1)}
+              disabled={page >= Math.ceil((tenders?.count || 0) / 10) - 1}
+            >
+              Next
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
