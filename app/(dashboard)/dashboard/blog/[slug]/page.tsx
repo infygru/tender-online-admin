@@ -39,7 +39,7 @@ export default function BlogPostDetailPage({
     const fetchPost = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:4500/api/blog/" + params.slug,
+          process.env.NEXT_PUBLIC_API_ENPOINT + "api/blog/" + params.slug,
         );
 
         if (response.data) {
@@ -70,7 +70,7 @@ export default function BlogPostDetailPage({
         formData.append(fieldName, file);
 
         const response = await axios.post(
-          "http://localhost:3000" + "/api/upload-image",
+          process.env.NEXT_PUBLIC_API_ENPOINT + "/api/upload-image",
           formData,
           {
             headers: {
@@ -181,7 +181,7 @@ export default function BlogPostDetailPage({
       }
 
       const response = await axios.put(
-        "http://localhost:4500/api/blog/" + params.slug,
+        process.env.NEXT_PUBLIC_API_ENPOINT + "/api/blog/" + params.slug,
         submitFormData,
         {
           headers: {
@@ -198,7 +198,7 @@ export default function BlogPostDetailPage({
         setIsEditing(false);
         // Refetch the post to ensure we have the latest data
         const updatedPost = await axios.get(
-          "http://localhost:4500/api/blog/" + params.slug,
+          process.env.NEXT_PUBLIC_API_ENPOINT + "/api/blog/" + params.slug,
         );
         setPost(updatedPost.data);
       }
@@ -387,7 +387,9 @@ export default function BlogPostDetailPage({
                   onClick={async () => {
                     try {
                       await fetch(
-                        "http://localhost:4500" + `/api/blog/` + params.slug,
+                        process.env.NEXT_PUBLIC_API_ENPOINT +
+                          `/api/blog/` +
+                          params.slug,
                         {
                           method: "DELETE",
                         },

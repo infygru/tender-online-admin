@@ -124,10 +124,13 @@ const CreateBlogPost: React.FC = () => {
         }
       });
 
-      const response = await fetch("http://localhost:4500/api/blog", {
-        method: "POST",
-        body: formDataToSubmit,
-      });
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_API_ENPOINT + "/api/blog",
+        {
+          method: "POST",
+          body: formDataToSubmit,
+        },
+      );
       const data = await response.json();
 
       if (response.ok && data.code === 201) {
