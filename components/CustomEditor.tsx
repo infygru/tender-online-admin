@@ -1,6 +1,7 @@
 // CustomEditor.tsx
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import type { StarterKit as StarterKitType } from "@tiptap/starter-kit";
 import Heading from "@tiptap/extension-heading";
 import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
@@ -97,7 +98,7 @@ const CustomEditor = ({
 }) => {
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit as any,
       Heading.configure({
         levels: [2, 3],
       }),
@@ -106,7 +107,7 @@ const CustomEditor = ({
         types: ["heading", "paragraph"],
       }),
     ],
-    content: initialContent ? initialContent : "",
+    content: initialContent || "",
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
