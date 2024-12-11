@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Trash2 } from "lucide-react";
 import Link from "next/link";
@@ -51,11 +52,9 @@ const Page = () => {
           <div className="text-gray-500">Add, Edit and Delete Blogs</div>
         </div>
         <div className="">
-          <Link
-            href={"/dashboard/blog/create"}
-            className="px5 rounded-xl bg-gray-500 px-6 py-3"
-          >
-            Add Blog
+          <Link href={"/dashboard/blog/create"}>
+            {" "}
+            <Button variant={"default"}>Add Blog</Button>
           </Link>
         </div>
       </div>
