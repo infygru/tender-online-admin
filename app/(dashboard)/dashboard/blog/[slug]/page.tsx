@@ -39,7 +39,7 @@ export default function BlogPostDetailPage({
     const fetchPost = async () => {
       try {
         const response = await axios.get(
-          process.env.NEXT_PUBLIC_API_ENPOINT + "api/blog/" + params.slug,
+          process.env.NEXT_PUBLIC_API_ENPOINT + "/api/blog/" + params.slug,
         );
 
         if (response.data) {

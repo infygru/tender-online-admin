@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/use-toast";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Trash2 } from "lucide-react";
 import Link from "next/link";
@@ -33,6 +34,7 @@ const Page = () => {
         },
       );
 
+      if (response.ok) toast({ title: "Blog Deleted Successfully" });
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
