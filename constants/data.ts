@@ -155,6 +155,12 @@ export const navItems: NavItem[] = [
     label: "userManagement",
   },
   {
+    title: "Subscription Management",
+    href: "/dashboard/Plan-management",
+    icon: "user",
+    label: "keywordManagement",
+  },
+  {
     title: "Banner",
     href: "/dashboard/banner",
     icon: "bookX",
