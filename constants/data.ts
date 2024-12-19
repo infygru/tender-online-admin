@@ -145,7 +145,7 @@ export const navItems: NavItem[] = [
   {
     title: "Keyword Research",
     href: "/dashboard/keyword-suggestions",
-    icon: "user",
+    icon: "search",
     label: "keywordManagement",
   },
   {
@@ -154,12 +154,7 @@ export const navItems: NavItem[] = [
     icon: "user",
     label: "userManagement",
   },
-  {
-    title: "Subscription Management",
-    href: "/dashboard/Plan-management",
-    icon: "user",
-    label: "keywordManagement",
-  },
+
   {
     title: "Banner",
     href: "/dashboard/banner",
@@ -173,13 +168,19 @@ export const navItems: NavItem[] = [
     label: "emailNotification",
   },
   {
-    title: "Transaction",
+    title: "Subscription Details",
+    href: "/dashboard/Plan-management",
+    icon: "pay",
+    label: "keywordManagement",
+  },
+  {
+    title: "Other Transactions",
     href: "/dashboard/transaction",
     icon: "pay",
     label: "transaction",
   },
   {
-    title: "Login",
+    title: "Logout",
     href: "/",
     icon: "login",
     label: "login",
