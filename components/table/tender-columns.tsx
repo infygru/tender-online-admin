@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 // Your format functions (unchanged)
 export const formatDate = (isoDateString: string): string => {
   const date = new Date(isoDateString);
-  const year = date.getFullYear().toString().slice(-2);
+  const year = date.getUTCFullYear().toString().slice(-2);
   const monthNames = [
     "Jan",
     "Feb",
@@ -24,16 +24,14 @@ export const formatDate = (isoDateString: string): string => {
     "Nov",
     "Dec",
   ];
-  const month = monthNames[date.getMonth()];
-  const day = date.getDate().toString().padStart(2, "0");
-  let hours = date.getHours();
-  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const month = monthNames[date.getUTCMonth()];
+  const day = date.getUTCDate().toString().padStart(2, "0");
+  let hours = date.getUTCHours();
+  const minutes = date.getUTCMinutes().toString().padStart(2, "0");
   const ampm = hours >= 12 ? "PM" : "AM";
   hours = hours % 12 || 12;
 
-  return `${day}/${month}/${year} ${hours
-    .toString()
-    .padStart(2, "0")}:${minutes} ${ampm}`;
+  return `${day}/${month}/${year} ${hours.toString().padStart(2, "0")}:${minutes} ${ampm}`;
 };
 
 export function formatIndianRupeePrice(amount: any): string {
@@ -106,13 +104,13 @@ export default function TenderColumns() {
         const classification = row.original.classification;
 
         return (
-          <div className="flex items-center justify-between min-w-60 gap-3">
+          <div className="flex min-w-60 items-center justify-between gap-3">
             <div className="flex flex-col">
               <span className="font-bold text-gray-900" title="Department">
                 {/* {department} */}
               </span>
               <span
-                className="text-xs line-clamp-2 whitespace-break-spaces font-bold text-gray-900"
+                className="line-clamp-2 whitespace-break-spaces text-xs font-bold text-gray-900"
                 title="Tender Title"
               >
                 {tenderName}
@@ -120,10 +118,10 @@ export default function TenderColumns() {
             </div>
 
             <span
-              className="bg-[#ECFDF3] text-[#027A48] gap-1 border rounded-full flex items-center w-max px-2 text-[9px] font-bold whitespace-nowrap"
+              className="flex w-max items-center gap-1 whitespace-nowrap rounded-full border bg-[#ECFDF3] px-2 text-[9px] font-bold text-[#027A48]"
               title="Classification"
             >
-              <div className="bg-green-500 rounded-full w-1 h-1" />
+              <div className="h-1 w-1 rounded-full bg-green-500" />
               {classification}
             </span>
           </div>
@@ -144,7 +142,7 @@ export default function TenderColumns() {
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="text-xs text-center w-32" title="Published Date">
+        <div className="w-32 text-center text-xs" title="Published Date">
           {formatDate(row.getValue("epublishedDate"))}
         </div>
       ),
@@ -163,7 +161,7 @@ export default function TenderColumns() {
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="text-xs text-center w-32" title="Bid Submission Date">
+        <div className="w-32 text-center text-xs" title="Bid Submission Date">
           {formatDate(row.getValue("bidSubmissionDate"))}
         </div>
       ),
@@ -182,7 +180,7 @@ export default function TenderColumns() {
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="text-xs text-center w-32" title="Bid Opening Date">
+        <div className="w-32 text-center text-xs" title="Bid Opening Date">
           {formatDate(row.getValue("bidOpeningDate"))}
         </div>
       ),
@@ -190,12 +188,12 @@ export default function TenderColumns() {
     {
       accessorKey: "refNo",
       header: ({ column }) => (
-        <div className="text-xs text-gray-500 ml-3" title="Reference No">
+        <div className="ml-3 text-xs text-gray-500" title="Reference No">
           Reference No
         </div>
       ),
       cell: ({ row }) => (
-        <div className="text-xs line-clamp-2 text-center" title="Reference No">
+        <div className="line-clamp-2 text-center text-xs" title="Reference No">
           {row.getValue("refNo")}
         </div>
       ),
@@ -205,7 +203,7 @@ export default function TenderColumns() {
       header: ({ column }) => (
         <Button
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="text-xs text-center text-gray-500"
+          className="text-center text-xs text-gray-500"
           variant="ghost"
           title="Tender Value (₹)"
         >
@@ -220,10 +218,10 @@ export default function TenderColumns() {
       ),
       sortingFn: (rowA, rowB, columnId) => {
         const valueA = Number(
-          String(rowA.getValue(columnId)).replace(/,/g, "")
+          String(rowA.getValue(columnId)).replace(/,/g, ""),
         );
         const valueB = Number(
-          String(rowB.getValue(columnId)).replace(/,/g, "")
+          String(rowB.getValue(columnId)).replace(/,/g, ""),
         );
 
         return valueA - valueB;
