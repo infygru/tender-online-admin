@@ -73,7 +73,7 @@ const TransactionPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="bg-gray-50 p-4">
       <h1 className="mb-6 text-center text-3xl font-bold text-gray-800">
         Transaction History
       </h1>

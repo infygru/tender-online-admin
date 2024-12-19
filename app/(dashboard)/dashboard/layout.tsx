@@ -21,9 +21,9 @@ export default function DashboardLayout({
     <>
       <QueryClientProvider client={queryClient}>
         <Header />
-        <div className="flex h-screen overflow-hidden">
+        <div className="flex h-screen overflow-y-scroll">
           <Sidebar />
-          <main className="w-full pt-16">{children}</main>
+          <main className="ml-auto w-full max-w-[85%] pt-16">{children}</main>
         </div>
       </QueryClientProvider>
     </>
