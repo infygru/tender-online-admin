@@ -34,7 +34,7 @@ export default function Page({ searchParams }: paramsProps) {
     refetch,
   } = useQuery(["tender", { page, limit: pageLimit, country }], () =>
     fetch(
-      process.env.NEXT_PUBLIC_API_ENPOINT + `/api/tender/tender-mapping`,
+      process.env.NEXT_PUBLIC_API_ENPOINT + `/api/tender/tenderRequest`,
     ).then((res) => res.json()),
   );
 
@@ -102,11 +102,11 @@ import {
 
 const columns: ColumnDef<any>[] = [
   {
-    accessorKey: "tenderId.tenderName",
+    accessorKey: "tenderTitle",
     header: "Tender Title",
   },
   {
-    accessorKey: "tenderId.TenderId",
+    accessorKey: "tenderId",
     header: "Tender Id",
   },
   {
@@ -153,7 +153,7 @@ const columns: ColumnDef<any>[] = [
       const updateNoteMutation = useMutation(
         (newNote: string) =>
           fetch(
-            `${process.env.NEXT_PUBLIC_API_ENPOINT}/api/tender/tender-mapping/${row.original._id}/note`,
+            `${process.env.NEXT_PUBLIC_API_ENPOINT}/api/tender/tenderRequest/${row.original._id}/note`,
             {
               method: "PATCH",
               headers: {
