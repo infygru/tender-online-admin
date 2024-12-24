@@ -1,134 +1,152 @@
 "use client";
-import React, { useState } from "react";
+
+import React, { useState, FormEvent, ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import axios from "axios";
-import { toast } from "sonner";
-import { set } from "date-fns";
-const formSchema = z.object({
-  email: z.string().min(2, {
-    message: "email must be at least 2 characters.",
-  }),
-  html_template: z.string().min(2, {
-    message: "html_template must be at least 2 characters.",
-  }),
-  subject: z.string().min(2, {
-    message: "subject must be at least 2 characters.",
-  }),
-});
+import { Card, CardContent } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useToast } from "@/components/ui/use-toast";
+interface FormData {
+  email: string;
+  subject: string;
+  html_template: string;
+}
+
+interface FormErrors {
+  email?: string;
+  subject?: string;
+  html_template?: string;
+}
 
 const SendEmail = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-      html_template: "",
-      subject: "",
-    },
+  const { toast } = useToast();
+  const [formData, setFormData] = useState<FormData>({
+    email: "",
+    subject: "",
+    html_template: "",
   });
-  const [loading, setLoading] = useState<boolean>(false);
-  // 2. Define a submit handler.
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<"success" | "error" | "">();
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setLoading(true);
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    try {
-      // Make an HTTP request to the specified endpoint.
-      const response = await axios.post(
-        process.env.NEXT_PUBLIC_API_ENPOINT + "/api/email/all",
-        values,
-      );
-      if (response.data.status === "success") {
-        toast.success("Email sent successfully");
-        setLoading(false);
-      } else {
-        toast.error("Something went wrong");
-        setLoading(false);
-      }
-
-      // Handle the response as needed.
-      console.log("API Response:", response.data);
-    } catch (error) {
-      // Handle errors.
-      console.error("API Error:", error);
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
+    if (!formData.email || formData.email.length < 2) {
+      newErrors.email = "Email must be at least 2 characters";
     }
-  }
+    if (!formData.subject || formData.subject.length < 2) {
+      newErrors.subject = "Subject must be at least 2 characters";
+    }
+    if (!formData.html_template || formData.html_template.length < 2) {
+      newErrors.html_template = "Message must be at least 2 characters";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-  if (loading) {
-    return <div className="px-6 py-6 text-2xl font-semibold">Loading ...</div>;
-  }
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_ENPOINT}/api/email/sendEmail`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        },
+      );
+      const data = await response.json();
+      if (response.ok) {
+        toast({ title: "Email sent Successfully" });
+        setStatus("success");
+        setFormData({
+          email: "",
+          subject: "",
+          html_template: "",
+        });
+      } else {
+        toast({ title: "Error sending mail" });
+        setStatus("error");
+      }
+    } catch (error) {
+      setStatus("error");
+    }
+  };
+
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   return (
-    <div className="px-6 py-3">
-      <div className="">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
+    <Card className="my-auto h-screen w-full max-w-2xl">
+      <CardContent className="p-6">
+        {status === "success" && (
+          <Alert className="mb-4 bg-green-50">
+            <AlertDescription>Email sent successfully!</AlertDescription>
+          </Alert>
+        )}
+        {status === "error" && (
+          <Alert className="mb-4 bg-red-50">
+            <AlertDescription>
+              Something went wrong. Please try again.
+            </AlertDescription>
+          </Alert>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Email</label>
+            <Input
               name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter User Email ID" {...field} />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
+              placeholder="Enter User Email ID"
+              value={formData.email}
+              onChange={handleInputChange}
+              className={errors.email ? "border-red-500" : ""}
             />
-            <FormField
-              control={form.control}
+            {errors.email && (
+              <p className="text-sm text-red-500">{errors.email}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Subject</label>
+            <Input
               name="subject"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Subject</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter a Subject" {...field} />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
+              placeholder="Enter a Subject"
+              value={formData.subject}
+              onChange={handleInputChange}
+              className={errors.subject ? "border-red-500" : ""}
             />
-            <FormField
-              control={form.control}
+            {errors.subject && (
+              <p className="text-sm text-red-500">{errors.subject}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Message</label>
+            <textarea
               name="html_template"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Message</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      rows={8}
-                      placeholder="Enter a Message"
-                      {...field}
-                    />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
+              rows={8}
+              placeholder="Enter a Message"
+              value={formData.html_template}
+              onChange={handleInputChange}
+              className={`w-full rounded-md border p-3 ${errors.html_template ? "border-red-500" : "border-gray-200"}`}
             />
-            <Button className="text-white" type="submit">
-              Submit
-            </Button>
-          </form>
-        </Form>
-      </div>
-    </div>
+            {errors.html_template && (
+              <p className="text-sm text-red-500">{errors.html_template}</p>
+            )}
+          </div>
+
+          <Button type="submit" className="w-full">
+            Submit
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
 
