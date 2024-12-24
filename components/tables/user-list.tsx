@@ -128,7 +128,7 @@ const UserList: React.FC<UserListProps> = ({
   };
   return (
     <div className="w-fit p-4">
-      <div className="mb-8 flex w-fit items-center gap-6">
+      <div className="mb-8 flex w-fit items-center gap-6 text-black">
         <button
           onClick={() => setActiveTab("support")}
           className={cn(
@@ -243,11 +243,11 @@ const UserList: React.FC<UserListProps> = ({
       {activeTab === "contacted" && (
         <>
           {contacts.length === 0 ? (
-            <p className="text-gray-600">No contacts available.</p>
+            <p className="text-black">No contacts available.</p>
           ) : (
             <table className="min-w-full overflow-hidden rounded-lg border border-gray-300 bg-white shadow-lg">
               <thead>
-                <tr className="bg-gray-200 text-sm uppercase leading-normal text-gray-700">
+                <tr className="bg-gray-200 text-sm uppercase leading-normal">
                   <th className="border px-6 py-4 text-left">First Name</th>
                   <th className="border px-6 py-4 text-left">Subject</th>
                   <th className="border px-6 py-4 text-left">Email</th>
@@ -256,7 +256,7 @@ const UserList: React.FC<UserListProps> = ({
                   <th className="border px-6 py-4 text-center">Remarks</th>
                 </tr>
               </thead>
-              <tbody className="text-sm font-light text-gray-600">
+              <tbody className="text-sm">
                 {contacts.map((contact) => (
                   <tr
                     key={contact._id}
@@ -269,6 +269,7 @@ const UserList: React.FC<UserListProps> = ({
                     <td className="border px-6 py-4 text-center">
                       <Button
                         variant="destructive"
+                        disabled
                         onClick={() => handleDelete(contact._id)}
                       >
                         Delete
@@ -366,11 +367,11 @@ const UserList: React.FC<UserListProps> = ({
       {activeTab === "gcontacted" && (
         <>
           {contacts.length === 0 ? (
-            <p className="text-gray-600">No contacts available.</p>
+            <p className="text-black">No contacts available.</p>
           ) : (
             <table className="min-w-full overflow-hidden rounded-lg border border-gray-300 bg-white shadow-lg">
               <thead>
-                <tr className="bg-gray-200 text-sm uppercase leading-normal text-gray-700">
+                <tr className="bg-gray-200 text-sm uppercase leading-normal">
                   <th className="border px-6 py-4 text-left">First Name</th>
                   <th className="border px-6 py-4 text-left">Email</th>
                   <th className="border px-6 py-4 text-left">Message</th>
@@ -378,7 +379,7 @@ const UserList: React.FC<UserListProps> = ({
                   <th className="border px-6 py-4 text-center">Remarks</th>
                 </tr>
               </thead>
-              <tbody className="text-sm font-light text-gray-600">
+              <tbody className="text-sm">
                 {contacts.map((contact) => (
                   <tr
                     key={contact._id}
@@ -390,6 +391,7 @@ const UserList: React.FC<UserListProps> = ({
                     <td className="border px-6 py-4 text-center">
                       <Button
                         variant="destructive"
+                        disabled
                         onClick={() => handleDelete(contact._id)}
                       >
                         Delete
